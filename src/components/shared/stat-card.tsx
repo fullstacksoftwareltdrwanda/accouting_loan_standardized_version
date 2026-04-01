@@ -23,32 +23,32 @@ export const StatCard = ({
   className,
 }: StatCardProps) => {
   const colorMap = {
-    blue: "text-blue-600 bg-blue-50 dark:bg-blue-900/10 dark:text-blue-400",
-    indigo: "text-indigo-600 bg-indigo-50 dark:bg-indigo-900/10 dark:text-indigo-400",
-    emerald: "text-emerald-600 bg-emerald-50 dark:bg-emerald-900/10 dark:text-emerald-400",
-    amber: "text-amber-600 bg-amber-50 dark:bg-amber-900/10 dark:text-amber-400",
-    red: "text-red-600 bg-red-50 dark:bg-red-900/10 dark:text-red-400",
-    violet: "text-violet-600 bg-violet-50 dark:bg-violet-900/10 dark:text-violet-400",
+    blue: "text-blue-600 bg-blue-50",
+    indigo: "text-indigo-600 bg-indigo-50",
+    emerald: "text-emerald-600 bg-emerald-50",
+    amber: "text-amber-600 bg-amber-50",
+    red: "text-red-600 bg-red-50",
+    violet: "text-violet-600 bg-violet-50",
   };
 
   return (
     <div className={cn(
-      "group p-6 rounded-2xl bg-white border border-zinc-200 shadow-sm transition-all hover:shadow-md dark:bg-zinc-900/50 dark:border-zinc-800",
+      "group p-4 rounded-xl bg-white border border-zinc-100 shadow-sm transition-all hover:shadow-md",
       className
     )}>
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-3">
         <div className={cn(
-          "p-3 rounded-xl transition-transform group-hover:scale-110",
+          "p-2 rounded-lg transition-transform group-hover:scale-105",
           colorMap[color]
         )}>
-          <Icon className="w-5 h-5" />
+          <Icon className="w-4 h-4" />
         </div>
       </div>
-      <div className="space-y-1">
-        <p className="text-xs font-extrabold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+      <div className="space-y-0.5">
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
           {title}
         </p>
-        <p className="text-2xl font-black text-zinc-900 dark:text-zinc-50">
+        <p className="text-lg font-bold text-zinc-800">
           {isCurrency ? formatCurrency(value) : value.toLocaleString()}
         </p>
       </div>

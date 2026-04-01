@@ -10,22 +10,22 @@ interface LogoProps {
   iconSize?: number;
   textSize?: string;
   isLink?: boolean;
-  variant?: "default" | "light"; // default is Dark background style, light is Light background style
+  variant?: "default" | "light";
 }
 
 export const Logo: React.FC<LogoProps> = ({
   className,
-  iconSize = 24,
-  textSize = "text-xl",
+  iconSize = 20,
+  textSize = "text-base",
   isLink = true,
   variant = "default",
 }) => {
   const content = (
-    <div className={cn("flex items-center gap-3", className)}>
+    <div className={cn("flex items-center gap-2.5", className)}>
       <div 
         className={cn(
-          "rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 transition-transform hover:scale-105",
-          iconSize <= 24 ? "w-10 h-10" : "w-12 h-12"
+          "rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center shadow-md shadow-indigo-500/15 transition-transform hover:scale-105",
+          iconSize <= 20 ? "w-8 h-8" : "w-10 h-10"
         )}
       >
         <BarChart className="text-white" size={iconSize} />
@@ -33,16 +33,16 @@ export const Logo: React.FC<LogoProps> = ({
       <span className={cn(
         "font-bold tracking-tight uppercase",
         textSize,
-        variant === "default" ? "text-zinc-900 dark:text-zinc-50" : "text-white"
+        variant === "default" ? "text-zinc-800" : "text-white"
       )}>
-        ALMS<span className="text-indigo-600">.</span>
+        ALMS<span className="text-indigo-500">.</span>
       </span>
     </div>
   );
 
   if (isLink) {
     return (
-      <Link href="/" className="inline-block no-underline">
+      <Link href="/dashboard" className="inline-block no-underline">
         {content}
       </Link>
     );

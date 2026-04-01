@@ -11,15 +11,15 @@ export const metadata = {
 
 export default function GeneralLedgerPage() {
   return (
-    <div className="p-4 md:p-8 animate-in fade-in duration-700">
-      <div className="max-w-[1600px] mx-auto space-y-8">
-        {/* Header Area */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <h2 className="text-3xl font-black tracking-tight text-zinc-900 dark:text-zinc-50 font-sans">
+    <div className="animate-in fade-in duration-500">
+      <div className="max-w-[1440px] mx-auto space-y-5">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div className="space-y-0.5">
+            <h2 className="text-xl font-bold tracking-tight text-zinc-800">
               General Ledger
             </h2>
-            <p className="text-zinc-500 font-sans dark:text-zinc-400">
+            <p className="text-[12px] text-zinc-400">
               Manage timeline filters, add manual journal entries, and view unified ledger records.
             </p>
           </div>
@@ -28,21 +28,17 @@ export default function GeneralLedgerPage() {
         {/* Top Filters */}
         <LedgerFilters />
 
-        {/* Middle Section: Split Layout (Manual Entry vs Recent) */}
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-stretch">
-          <div className="xl:col-span-8 flex flex-col h-full">
-            <div className="flex-1">
-              <ManualJournalEntry />
-            </div>
+        {/* Middle Section: Split Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+          <div className="lg:col-span-8 flex flex-col h-full">
+            <ManualJournalEntry />
           </div>
-          <div className="xl:col-span-4 flex flex-col h-full">
-            <div className="flex-1">
-              <RecentEntries />
-            </div>
+          <div className="lg:col-span-4 flex flex-col h-full">
+            <RecentEntries />
           </div>
         </div>
 
-        {/* Bottom Section: Full View Table */}
+        {/* Bottom: Full View Table */}
         <GeneralLedgerTable />
       </div>
     </div>

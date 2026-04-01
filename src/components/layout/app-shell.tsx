@@ -10,9 +10,9 @@ interface AppShellProps {
 
 export const AppShell = ({ children }: AppShellProps) => {
   return (
-    <div className="flex min-h-screen w-full bg-zinc-50 dark:bg-[#02040a]">
+    <div className="flex min-h-screen w-full bg-[#f8f9fb]">
       {/* Sidebar - Fixed width on desktop */}
-      <div className="hidden lg:block w-72 shrink-0">
+      <div className="hidden lg:block w-[250px] shrink-0">
         <AppSidebar />
       </div>
 
@@ -20,16 +20,16 @@ export const AppShell = ({ children }: AppShellProps) => {
       <div className="flex flex-1 flex-col min-w-0">
         <AppHeader />
         
-        <main className="flex-1 p-6 md:p-8 lg:p-10 animate-in fade-in duration-500">
-          <div className="mx-auto max-w-7xl">
+        <main className="flex-1 p-4 md:p-6 animate-in fade-in duration-500">
+          <div className="mx-auto max-w-[1440px]">
             {children}
           </div>
         </main>
 
-        <footer className="py-6 px-10 border-t border-zinc-200 dark:border-zinc-900 bg-white dark:bg-[#050505]">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] items-center font-extrabold uppercase tracking-widest text-zinc-500">
-                <p>© {new Date().getFullYear()} ALMS Standardized Version. Security Protocol v1.4.2</p>
-                <div className="flex gap-6">
+        <footer className="py-4 px-6 border-t border-zinc-200/60 bg-white">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-3 text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
+                <p>© {new Date().getFullYear()} ALMS Standardized. Security Protocol v1.4.2</p>
+                <div className="flex gap-5">
                     <button className="hover:text-indigo-600 transition-colors">Documentation</button>
                     <button className="hover:text-indigo-600 transition-colors">Privacy Policy</button>
                     <button className="hover:text-indigo-600 transition-colors">Data Processing</button>

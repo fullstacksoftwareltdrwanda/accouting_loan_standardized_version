@@ -40,6 +40,14 @@ export const customerColumns = (
   actions: DataTableAction<Customer>[]
 ): ColumnDef<Customer>[] => [
   {
+    // Hidden column used purely for name-based filtering
+    id: "firstName",
+    accessorFn: (row) => `${row.firstName} ${row.lastName} ${row.email}`,
+    header: () => null,
+    cell: () => null,
+    enableHiding: false,
+  },
+  {
     accessorKey: "profile",
     header: "Customer",
     cell: ({ row }) => {
@@ -47,14 +55,14 @@ export const customerColumns = (
       const initials = `${customer.firstName[0]}${customer.lastName[0]}`;
       return (
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 font-black text-zinc-600 border border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-400">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100 font-semibold text-[12px] text-zinc-600 border border-zinc-200">
             {initials}
           </div>
           <div className="flex flex-col">
-            <span className="font-bold text-zinc-900 dark:text-zinc-50">
+            <span className="font-semibold text-zinc-800 text-[13px]">
               {customer.firstName} {customer.lastName}
             </span>
-            <span className="text-xs text-zinc-500 font-sans">{customer.email}</span>
+            <span className="text-[11px] text-zinc-400">{customer.email}</span>
           </div>
         </div>
       );

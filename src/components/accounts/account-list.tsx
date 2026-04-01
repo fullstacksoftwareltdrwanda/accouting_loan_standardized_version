@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Plus, Layout } from "lucide-react";
+import { Plus } from "lucide-react";
 import { GLAccount } from "@/types/account";
 import { getAccounts, createAccount } from "@/services/mock/account.service";
 import { DataTable } from "@/components/table/data-table";
@@ -46,7 +46,6 @@ export function AccountList() {
       const newAcc = await createAccount(data);
       setAccounts((prev) => [...prev, newAcc].sort((a, b) => a.code.localeCompare(b.code)));
       setIsDialogOpen(false);
-      // In a real app, we'd trigger a toast here
     } catch (error) {
       console.error("Creation failed", error);
     } finally {
@@ -62,33 +61,33 @@ export function AccountList() {
   const columns = accountColumns(actions);
 
   return (
-    <div className="space-y-8 max-w-7xl">
+    <div className="space-y-5 max-w-[1440px]">
       {/* Header Area */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="space-y-1">
-          <h2 className="text-3xl font-black tracking-tight text-zinc-900 dark:text-zinc-50 font-sans">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="space-y-0.5">
+          <h2 className="text-xl font-bold tracking-tight text-zinc-800">
             Chart of Accounts
           </h2>
-          <p className="text-zinc-500 font-sans dark:text-zinc-400">
+          <p className="text-[12px] text-zinc-400">
             Manage your General Ledger structure and initial balances.
           </p>
         </div>
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="h-12 px-6 rounded-2xl bg-indigo-600 hover:bg-indigo-700 font-black shadow-md transition-all active:scale-95">
-              <Plus className="mr-2 h-5 w-5" />
+            <Button className="h-9 px-4 rounded-lg bg-indigo-600 hover:bg-indigo-700 font-semibold shadow-sm text-[13px]">
+              <Plus className="mr-1.5 h-4 w-4" />
               New Account
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-black">Create Ledger Account</DialogTitle>
-              <DialogDescription>
+              <DialogTitle className="text-lg font-bold">Create Ledger Account</DialogTitle>
+              <DialogDescription className="text-[12px] text-zinc-400">
                 Define a new account in your chart. Ensure the code matches your accounting standards.
               </DialogDescription>
             </DialogHeader>
-            <div className="py-6">
+            <div className="py-4">
               <DynamicForm 
                 config={NEW_ACCOUNT_FORM_CONFIG} 
                 onSubmit={handleCreateAccount} 
@@ -100,7 +99,7 @@ export function AccountList() {
       </div>
 
       {/* Table Area */}
-      <div className="bg-white p-6 rounded-[32px] border border-zinc-200 shadow-sm dark:bg-zinc-950/40 dark:border-zinc-800">
+      <div className="bg-white p-4 rounded-xl border border-zinc-100 shadow-sm">
         <DataTable 
           columns={columns} 
           data={accounts} 

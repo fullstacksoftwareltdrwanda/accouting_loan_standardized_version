@@ -20,16 +20,16 @@ export const SectionCard = ({
 }: SectionCardProps) => {
   return (
     <div className={cn(
-      "bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-sm transition-all hover:shadow-md dark:bg-zinc-900/50 dark:border-zinc-800",
+      "bg-white border border-zinc-100 rounded-xl overflow-hidden shadow-sm",
       className
     )}>
-      <div className="px-6 py-5 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
-        <div className="space-y-1">
-          <h3 className="text-lg font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50">
+      <div className="px-4 py-3.5 border-b border-zinc-100 flex items-center justify-between">
+        <div className="space-y-0.5">
+          <h3 className="text-sm font-semibold tracking-tight text-zinc-800">
             {title}
           </h3>
           {subtitle && (
-            <p className="text-sm text-zinc-500 font-sans dark:text-zinc-400">
+            <p className="text-[11px] text-zinc-400">
               {subtitle}
             </p>
           )}
@@ -40,7 +40,7 @@ export const SectionCard = ({
           </div>
         )}
       </div>
-      <div className="p-6">
+      <div className="p-4">
         {children}
       </div>
     </div>

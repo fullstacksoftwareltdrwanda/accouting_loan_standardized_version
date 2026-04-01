@@ -46,65 +46,69 @@ export function ManualJournalEntry() {
   const difference = Math.abs(totalDebits - totalCredits);
   const isBalanced = difference === 0 && totalDebits > 0;
 
+  const handleReset = () => {
+    setDate("2026-04-01");
+    setVoucher("JV-20260401-001");
+    setRows([
+      { id: "row-1", accountId: "", narration: "", debit: 0, credit: 0 },
+      { id: "row-2", accountId: "", narration: "", debit: 0, credit: 0 },
+    ]);
+  };
+
   return (
-    <div className="bg-white rounded-[24px] border border-zinc-200 shadow-sm dark:bg-zinc-950/40 dark:border-zinc-800 overflow-hidden flex flex-col h-full">
+    <div className="bg-white rounded-xl border border-zinc-100 shadow-sm overflow-hidden flex flex-col h-full">
       {/* Header */}
-      <div className="bg-blue-600 p-4 flex items-center justify-between text-white">
+      <div className="bg-blue-600 px-4 py-2.5 flex items-center justify-between text-white">
         <div className="flex items-center gap-2">
-          <FileText className="w-5 h-5" />
-          <h3 className="font-bold text-lg">Manual Journal Entry</h3>
+          <FileText className="w-4 h-4" />
+          <h3 className="font-semibold text-sm">Manual Journal Entry</h3>
         </div>
-        <span className="bg-white/20 text-white text-xs px-3 py-1 rounded-full font-medium">Optional</span>
+        <span className="bg-white/20 text-white text-[10px] px-2.5 py-0.5 rounded-full font-medium">Optional</span>
       </div>
 
-      <div className="p-6 space-y-8 flex-1">
+      <div className="p-4 space-y-5 flex-1">
         {/* Top Info */}
-        <div className="grid grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label className="text-sm font-semibold text-zinc-700">Date *</label>
-            <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="space-y-1">
+            <label className="text-[11px] font-semibold text-zinc-500">Date *</label>
+            <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="h-8 text-[12px]" />
           </div>
-          <div className="space-y-2">
-            <label className="text-sm font-semibold text-zinc-700">Voucher Number *</label>
-            <Input value={voucher} onChange={(e) => setVoucher(e.target.value)} />
-            <p className="text-xs text-zinc-400">Auto-generated or enter custom voucher</p>
+          <div className="space-y-1">
+            <label className="text-[11px] font-semibold text-zinc-500">Voucher Number *</label>
+            <Input value={voucher} onChange={(e) => setVoucher(e.target.value)} className="h-8 text-[12px]" />
+            <p className="text-[10px] text-zinc-300">Auto-generated or enter custom voucher</p>
           </div>
         </div>
 
         {/* Entries list */}
-        <div className="space-y-6">
-          <div className="flex items-center gap-2">
-            <h4 className="font-bold text-zinc-800 flex items-center gap-2">
-              <span className="w-4 h-4 rounded-sm border-2 border-zinc-800" />
-              Journal Entries
-            </h4>
-          </div>
+        <div className="space-y-4">
+          <h4 className="text-[12px] font-semibold text-zinc-600">Journal Entries</h4>
 
-          <div className="space-y-8">
+          <div className="space-y-4">
             {rows.map((row, index) => {
               const account = MOCK_ACCOUNTS.find((a) => a.id === row.accountId);
 
               return (
-                <div key={row.id} className="relative p-4 border rounded-xl border-zinc-100 bg-zinc-50/50">
-                  <div className="absolute -top-3 left-4">
-                    <span className="bg-blue-600 text-white text-xs px-3 py-1 font-bold rounded-md shadow-sm">
+                <div key={row.id} className="relative p-3 border rounded-lg border-zinc-100 bg-zinc-50/30">
+                  <div className="absolute -top-2.5 left-3">
+                    <span className="bg-blue-600 text-white text-[10px] px-2 py-0.5 font-semibold rounded">
                       Entry #{index + 1}
                     </span>
                   </div>
                   {rows.length > 2 && (
                     <button 
                       onClick={() => removeRow(row.id)}
-                      className="absolute -top-3 right-4 bg-red-100 text-red-600 p-1.5 rounded-full hover:bg-red-200 transition-colors"
+                      className="absolute -top-2 right-3 bg-red-50 text-red-500 p-1 rounded-full hover:bg-red-100 transition-colors"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <Trash2 className="w-3 h-3" />
                     </button>
                   )}
                   
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mt-3">
-                    <div className="md:col-span-3 space-y-2">
-                      <label className="text-xs font-semibold text-zinc-600">Account (Class) *</label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 mt-2">
+                    <div className="sm:col-span-1 lg:col-span-3 space-y-1">
+                      <label className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider">Account *</label>
                       <Select value={row.accountId} onValueChange={(val) => updateRow(row.id, "accountId", val)}>
-                        <SelectTrigger className="bg-white">
+                        <SelectTrigger className="bg-white h-8 text-[12px]">
                           <SelectValue placeholder="Select Account" />
                         </SelectTrigger>
                         <SelectContent>
@@ -117,24 +121,23 @@ export function ManualJournalEntry() {
                       </Select>
                     </div>
                     
-                    <div className="md:col-span-3 space-y-2">
-                      <label className="text-xs font-semibold text-zinc-600">Account Name</label>
-                      <Input value={account?.name || ""} disabled className="bg-zinc-100/50" />
+                    <div className="sm:col-span-1 lg:col-span-3 space-y-1">
+                      <label className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider">Account Name</label>
+                      <Input value={account?.name || ""} disabled className="bg-zinc-100/50 h-8 text-[12px]" />
                     </div>
 
-                    <div className="md:col-span-6 space-y-2">
-                      <label className="text-xs font-semibold text-zinc-600">Narration / Particular *</label>
+                    <div className="sm:col-span-2 lg:col-span-6 space-y-1">
+                      <label className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider">Narration *</label>
                       <Input 
                         placeholder="Description of this entry" 
                         value={row.narration}
                         onChange={(e) => updateRow(row.id, "narration", e.target.value)}
-                        className="bg-white"
+                        className="bg-white h-8 text-[12px]"
                       />
-                      <p className="text-[10px] text-zinc-400 mt-1">Saved as the Particular for this entry</p>
                     </div>
 
-                    <div className="md:col-span-3 space-y-2">
-                      <label className="text-xs font-semibold text-zinc-600">Debit (Dr)</label>
+                    <div className="sm:col-span-1 lg:col-span-3 space-y-1">
+                      <label className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider">Debit (Dr)</label>
                       <Input 
                         type="number" 
                         min="0"
@@ -142,12 +145,12 @@ export function ManualJournalEntry() {
                         placeholder="0.00" 
                         value={row.debit || ""}
                         onChange={(e) => updateRow(row.id, "debit", parseFloat(e.target.value) || 0)}
-                        className="bg-white text-emerald-600 font-semibold border-emerald-200 focus-visible:ring-emerald-500"
+                        className="bg-white text-emerald-600 font-semibold border-emerald-200 focus-visible:ring-emerald-500/20 h-8 text-[12px]"
                       />
                     </div>
 
-                    <div className="md:col-span-3 space-y-2">
-                      <label className="text-xs font-semibold text-zinc-600">Credit (Cr)</label>
+                    <div className="sm:col-span-1 lg:col-span-3 space-y-1">
+                      <label className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider">Credit (Cr)</label>
                       <Input 
                         type="number" 
                         min="0"
@@ -155,14 +158,13 @@ export function ManualJournalEntry() {
                         placeholder="0.00" 
                         value={row.credit || ""}
                         onChange={(e) => updateRow(row.id, "credit", parseFloat(e.target.value) || 0)}
-                        className="bg-white text-rose-600 font-semibold border-rose-200 focus-visible:ring-rose-500"
+                        className="bg-white text-rose-600 font-semibold border-rose-200 focus-visible:ring-rose-500/20 h-8 text-[12px]"
                       />
                     </div>
                     
-                    <div className="md:col-span-6 flex items-end">
-                      <p className="text-[11px] text-zinc-500 bg-white p-2.5 rounded-md border border-zinc-100 w-full text-center">
-                        <span className="font-semibold text-zinc-700">Note:</span> Beginning balance = Previous ending balance<br/>
-                        Ending balance = Beginning + (Debit - Credit)
+                    <div className="sm:col-span-2 lg:col-span-6 flex items-end">
+                      <p className="text-[10px] text-zinc-400 bg-white p-2 rounded border border-zinc-100 w-full text-center">
+                        <span className="font-medium text-zinc-500">Note:</span> Ending = Beginning + (Dr - Cr)
                       </p>
                     </div>
                   </div>
@@ -174,56 +176,60 @@ export function ManualJournalEntry() {
           <Button 
             onClick={addRow} 
             variant="outline" 
-            className="w-full h-12 border-dashed border-2 border-zinc-300 text-zinc-600 hover:text-indigo-600 hover:border-indigo-600 hover:bg-indigo-50 font-semibold transition-all"
+            className="w-full h-9 border-dashed border-zinc-200 text-zinc-500 hover:text-indigo-600 hover:border-indigo-400 hover:bg-indigo-50/30 text-[12px] font-medium"
           >
-            <Plus className="w-5 h-5 mr-2" />
+            <Plus className="w-4 h-4 mr-1.5" />
             Add Another Journal Entry
           </Button>
         </div>
 
         {/* Summary Footer */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-          <div className="bg-cyan-50/20 border border-cyan-100 rounded-xl p-4 space-y-2 text-sm font-medium">
-            <div className="flex justify-between text-zinc-600">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="bg-zinc-50/50 border border-zinc-100 rounded-lg p-3 space-y-1.5 text-[12px] font-medium">
+            <div className="flex justify-between text-zinc-500">
               <span>Total Debits:</span>
-              <span className="text-emerald-600 font-bold">{totalDebits.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+              <span className="text-emerald-600 font-semibold">{totalDebits.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
             </div>
-            <div className="flex justify-between text-zinc-600">
+            <div className="flex justify-between text-zinc-500">
               <span>Total Credits:</span>
-              <span className="text-rose-600 font-bold">{totalCredits.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+              <span className="text-rose-600 font-semibold">{totalCredits.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
             </div>
-            <div className="h-px bg-cyan-100 my-2" />
-            <div className="flex justify-between items-center text-zinc-800">
+            <div className="h-px bg-zinc-100" />
+            <div className="flex justify-between items-center text-zinc-700">
               <span>Difference:</span>
-              <div className="flex items-center gap-2">
-                <span className={`font-bold ${difference === 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
+              <div className="flex items-center gap-1.5">
+                <span className={`font-semibold ${difference === 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
                   {difference.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </span>
-                {difference === 0 && totalDebits > 0 && <span className="text-emerald-500 font-bold">✓</span>}
+                {difference === 0 && totalDebits > 0 && <span className="text-emerald-500 text-xs">✓</span>}
               </div>
             </div>
           </div>
 
-          <div className={`p-4 rounded-xl flex items-start gap-3 text-sm ${isBalanced ? 'bg-emerald-50 border border-emerald-100 text-emerald-800' : 'bg-amber-50 border border-amber-200 text-amber-800'}`}>
-            <ShieldAlert className={`w-5 h-5 shrink-0 ${isBalanced ? 'text-emerald-500' : 'text-amber-500'}`} />
+          <div className={`p-3 rounded-lg flex items-start gap-2.5 text-[12px] ${isBalanced ? 'bg-emerald-50/50 border border-emerald-100 text-emerald-700' : 'bg-amber-50/50 border border-amber-100 text-amber-700'}`}>
+            <ShieldAlert className={`w-4 h-4 shrink-0 mt-0.5 ${isBalanced ? 'text-emerald-500' : 'text-amber-500'}`} />
             <div>
-              <p className="font-semibold">{isBalanced ? "Journal entries balance." : "Journal entries must balance."}</p>
-              <p className="opacity-80 mt-1 flex-wrap">Total debits must equal total credits before you can save.</p>
+              <p className="font-semibold text-[11px]">{isBalanced ? "Entries balanced." : "Entries must balance."}</p>
+              <p className="opacity-70 mt-0.5 text-[11px]">Total debits must equal total credits to save.</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="p-4 bg-zinc-50 border-t flex items-center justify-center gap-3 rounded-b-[24px]">
+      <div className="px-4 py-3 bg-zinc-50/50 border-t border-zinc-100 flex items-center justify-center gap-2">
         <Button 
           disabled={!isBalanced} 
-          className="h-11 flex-1 bg-blue-600 hover:bg-blue-700 font-bold shadow-md disabled:opacity-50"
+          className="h-8 flex-1 bg-blue-600 hover:bg-blue-700 font-semibold shadow-sm disabled:opacity-40 text-[12px]"
         >
-          <Save className="w-4 h-4 mr-2" />
+          <Save className="w-3.5 h-3.5 mr-1.5" />
           Save Journal Entry
         </Button>
-        <Button variant="outline" className="h-11 flex-1 font-semibold text-zinc-600 bg-zinc-500 border-zinc-500 hover:bg-zinc-600 text-white hover:text-white">
-          <RotateCcw className="w-4 h-4 mr-2" />
+        <Button 
+          variant="outline" 
+          onClick={handleReset}
+          className="h-8 flex-1 font-medium text-zinc-500 text-[12px]"
+        >
+          <RotateCcw className="w-3.5 h-3.5 mr-1.5" />
           Reset Form
         </Button>
       </div>
