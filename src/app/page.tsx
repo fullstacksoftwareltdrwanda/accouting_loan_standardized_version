@@ -1,5 +1,5 @@
-import Image from "next/image";
-import { ArrowRight, BarChart3, ShieldCheck, Zap, Laptop, Clock, PieChart, Users } from "lucide-react";
+import { Logo } from "@/components/common/logo";
+import { ArrowRight, Shield, Zap, Laptop, Clock, PieChart, Users } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -7,14 +7,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-white dark:bg-[#050505] selection:bg-indigo-100 dark:selection:bg-indigo-900/30 overflow-x-hidden">
       {/* Navigation */}
       <nav className="sticky top-0 z-50 flex items-center justify-between px-8 py-6 backdrop-blur-md bg-white/70 dark:bg-[#050505]/70 border-b border-zinc-100 dark:border-zinc-800/50">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-            <BarChart3 className="text-white w-6 h-6" />
-          </div>
-          <span className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-            ALMS<span className="text-indigo-600">.</span>
-          </span>
-        </div>
+        <Logo className="scale-90 sm:scale-100" />
         <div className="hidden md:flex items-center gap-8">
           <a href="#features" className="text-sm font-medium text-zinc-600 hover:text-indigo-600 transition-colors dark:text-zinc-400 dark:hover:text-indigo-400 font-sans">Features</a>
           <a href="#solutions" className="text-sm font-medium text-zinc-600 hover:text-indigo-600 transition-colors dark:text-zinc-400 dark:hover:text-indigo-400 font-sans">Solutions</a>
@@ -130,7 +123,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { icon: ShieldCheck, title: "Secure & Compliant", desc: "Built with bank-grade security and full compliance standards for financial auditing." },
+              { icon: Shield, title: "Secure & Compliant", desc: "Built with bank-grade security and full compliance standards for financial auditing." },
               { icon: Laptop, title: "Modern Interface", desc: "A sleek, intuitive dashboard designed for speed and productivity." },
               { icon: Clock, title: "Automated Triggers", desc: "Automatic penalty calculations and interest accruals without manual intervention." },
               { icon: PieChart, title: "Deep Analytics", desc: "Powerful reporting tools that provide crystal clear insights into your portfolio health." }
@@ -173,10 +166,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
             <div className="col-span-2">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center">
-                  <BarChart3 className="text-white w-5 h-5" />
-                </div>
-                <span className="text-lg font-extrabold tracking-tight dark:text-white">ALMS.</span>
+                <Logo isLink={false} iconSize={20} textSize="text-lg" />
               </div>
               <p className="text-zinc-500 dark:text-zinc-400 text-sm max-w-xs font-sans">
                 The standardized accounting and loan management ecosystem built for the modern era.

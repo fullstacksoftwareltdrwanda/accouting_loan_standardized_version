@@ -1,0 +1,155 @@
+import { GLAccount } from "@/types/account";
+
+export const MOCK_ACCOUNTS: GLAccount[] = [
+  // ASSETS (1xxx)
+  {
+    id: "acc_1",
+    code: "1101",
+    name: "Cash in Hand",
+    category: "Asset",
+    normalBalance: "Debit",
+    balance: 24500.00,
+    status: "active",
+    lastModified: "2026-03-25",
+    description: "Physical cash held in office safely."
+  },
+  {
+    id: "acc_2",
+    code: "1102",
+    name: "Main Operations Bank Account",
+    category: "Asset",
+    normalBalance: "Debit",
+    balance: 1540200.50,
+    status: "active",
+    lastModified: "2026-03-31",
+  },
+  {
+    id: "acc_3",
+    code: "1201",
+    name: "Loans Receivable",
+    category: "Asset",
+    normalBalance: "Debit",
+    balance: 3120400.00,
+    status: "active",
+    lastModified: "2026-03-31",
+    description: "Principal amount of all active loans."
+  },
+  {
+    id: "acc_4",
+    code: "1205",
+    name: "Provision for Doubtful Debts",
+    category: "Asset",
+    normalBalance: "Credit",
+    balance: 45000.00,
+    status: "active",
+    lastModified: "2026-03-20",
+  },
+  
+  // LIABILITIES (2xxx)
+  {
+    id: "acc_5",
+    code: "2101",
+    name: "Accounts Payable",
+    category: "Liability",
+    normalBalance: "Credit",
+    balance: 12400.00,
+    status: "active",
+    lastModified: "2026-03-28",
+  },
+  {
+    id: "acc_6",
+    code: "2402",
+    name: "Deferred Monitoring Fees",
+    category: "Liability",
+    normalBalance: "Credit",
+    balance: 8200.00,
+    status: "active",
+    lastModified: "2026-03-15",
+  },
+
+  // EQUITY (3xxx)
+  {
+    id: "acc_7",
+    code: "3101",
+    name: "Owner's Equity",
+    category: "Equity",
+    normalBalance: "Credit",
+    balance: 1250000.00,
+    status: "active",
+    lastModified: "2026-01-01",
+  },
+  {
+    id: "acc_8",
+    code: "3201",
+    name: "Retained Earnings",
+    category: "Equity",
+    normalBalance: "Credit",
+    balance: 345000.00,
+    status: "active",
+    lastModified: "2026-01-01",
+  },
+
+  // REVENUE (4xxx)
+  {
+    id: "acc_9",
+    code: "4101",
+    name: "Interest Income",
+    category: "Revenue",
+    normalBalance: "Credit",
+    balance: 245000.00,
+    status: "active",
+    lastModified: "2026-03-31",
+  },
+  {
+    id: "acc_10",
+    code: "4201",
+    name: "Management Fees",
+    category: "Revenue",
+    normalBalance: "Credit",
+    balance: 12500.00,
+    status: "active",
+    lastModified: "2026-03-31",
+  },
+  {
+    id: "acc_11",
+    code: "4205",
+    name: "Penalty Fees",
+    category: "Revenue",
+    normalBalance: "Credit",
+    balance: 4200.00,
+    status: "active",
+    lastModified: "2026-03-31",
+  },
+
+  // EXPENSES (5xxx)
+  {
+    id: "acc_12",
+    code: "5101",
+    name: "Office Rent",
+    category: "Expense",
+    normalBalance: "Debit",
+    balance: 45000.00,
+    status: "active",
+    lastModified: "2026-03-01",
+  },
+  {
+    id: "acc_13",
+    code: "5201",
+    name: "Staff Salaries",
+    category: "Expense",
+    normalBalance: "Debit",
+    balance: 125000.00,
+    status: "active",
+    lastModified: "2026-03-31",
+  },
+  {
+    id: "acc_14",
+    code: "5301",
+    name: "Utilities & Communication",
+    category: "Expense",
+    normalBalance: "Debit",
+    balance: 3400.00,
+    status: "active",
+    lastModified: "2026-03-31",
+  }
+];

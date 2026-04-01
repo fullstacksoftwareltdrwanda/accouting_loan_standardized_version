@@ -1,0 +1,159 @@
+﻿
+> accouting_loan_standardized_version@0.1.0 lint
+> eslint
+
+
+C:\Users\manzi\accouting_loan_standardized_version\src\app\page.tsx
+  2:60  warning  'Users' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\accounts\account-list.tsx
+   4:16  warning  'Layout' is defined but never used        @typescript-eslint/no-unused-vars
+  43:44  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\approvals\approval-columns.tsx
+  10:10  warning  'Button' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\approvals\approval-list.tsx
+  4:10  warning  'CheckCircle' is defined but never used  @typescript-eslint/no-unused-vars
+  4:23  warning  'XCircle' is defined but never used      @typescript-eslint/no-unused-vars
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\assets\asset-columns.tsx
+  41:46  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\assets\asset-list.tsx
+   4:16  warning  'Building2' is defined but never used     @typescript-eslint/no-unused-vars
+  43:43  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\auth\login-form.tsx
+   60:19  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  163:31  warning  'checked' is defined but never used       @typescript-eslint/no-unused-vars
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\auth\login-hero.tsx
+  86:28  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\customers\customer-columns.tsx
+  9:10  warning  'User' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\customers\customer-list.tsx
+   4:10  warning  'Plus' is defined but never used          @typescript-eslint/no-unused-vars
+  43:46  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\dashboard\dashboard-overview.tsx
+  14:3   warning  'TrendingUp' is defined but never used                           @typescript-eslint/no-unused-vars
+  15:3   warning  'TrendingDown' is defined but never used                         @typescript-eslint/no-unused-vars
+  16:3   warning  'ArrowUp' is defined but never used                              @typescript-eslint/no-unused-vars
+  17:3   warning  'ArrowDown' is defined but never used                            @typescript-eslint/no-unused-vars
+  23:10  warning  'cn' is defined but never used                                   @typescript-eslint/no-unused-vars
+  38:37  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\expenses\expense-list.tsx
+   4:16  warning  'ReceiptText' is defined but never used   @typescript-eslint/no-unused-vars
+  43:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\forms\dynamic-form.tsx
+   7:29  warning  'FormFieldConfig' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+  16:20  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-explicit-any
+  73:25  warning  Compilation Skipped: Use of incompatible library
+
+This API returns functions which cannot be memoized without leading to stale UI. To prevent this, by default React Compiler will skip memoizing this component/hook. However, you may see issues if values from this API are passed to other components/hooks that are memoized.
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\forms\dynamic-form.tsx:73:25
+  71 |
+  72 |   const { handleSubmit, watch } = methods;
+> 73 |   const currentValues = watch();
+     |                         ^^^^^ React Hook Form's `useForm()` API returns a `watch()` function which cannot be memoized safely.
+  74 |
+  75 |   // 3. Group fields by section
+  76 |   const sections = config.sections || [{ id: "default", title: "General Information" }];  react-hooks/incompatible-library
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\general-ledger\ledger-filters.tsx
+  4:20  warning  'Search' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\general-ledger\recent-entries.tsx
+  54:16  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\layout\app-header.tsx
+  4:34  warning  'HelpCircle' is defined but never used  @typescript-eslint/no-unused-vars
+  4:46  warning  'LogOut' is defined but never used      @typescript-eslint/no-unused-vars
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\layout\app-sidebar.tsx
+  6:18  warning  'ChevronRight' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\loans\loan-columns.tsx
+   59:3   warning  'actions' is defined but never used       @typescript-eslint/no-unused-vars
+  113:55  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  131:11  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  131:42  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  155:55  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\loans\loan-list.tsx
+   4:10  warning  'Plus' is defined but never used          @typescript-eslint/no-unused-vars
+  43:40  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\loans\rejected-loan-list.tsx
+  4:10  warning  'XCircle' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\loans\requested-loan-list.tsx
+  4:10  warning  'Clock' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\reports\report-grid.tsx
+  4:24  warning  'SlidersHorizontal' is defined but never used  @typescript-eslint/no-unused-vars
+  8:10  warning  'Button' is defined but never used             @typescript-eslint/no-unused-vars
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\shared\empty-state.tsx
+  4:20  warning  'Search' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\shared\notifications-dropdown.tsx
+  4:16  warning  'Check' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\table\data-table.tsx
+  19:10  warning  'ArrowUpDown' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  19:23  warning  'ChevronDown' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  19:36  warning  'MoreHorizontal' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+  29:10  warning  'Button' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+  35:10  warning  'cn' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+  57:17  warning  Compilation Skipped: Use of incompatible library
+
+This API returns functions which cannot be memoized without leading to stale UI. To prevent this, by default React Compiler will skip memoizing this component/hook. However, you may see issues if values from this API are passed to other components/hooks that are memoized.
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\table\data-table.tsx:57:17
+  55 |   const [rowSelection, setRowSelection] = React.useState({});
+  56 |
+> 57 |   const table = useReactTable({
+     |                 ^^^^^^^^^^^^^ TanStack Table's `useReactTable()` API returns functions that cannot be memoized safely
+  58 |     data,
+  59 |     columns,
+  60 |     onSortingChange: setSorting,  react-hooks/incompatible-library
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\table\row-actions.tsx
+  13:3  warning  'DropdownMenuShortcut' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\ui\select.tsx
+  5:30  warning  'ChevronUp' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\manzi\accouting_loan_standardized_version\src\components\ui\textarea.tsx
+  4:18  error  An interface declaring no members is equivalent to its supertype  @typescript-eslint/no-empty-object-type
+
+C:\Users\manzi\accouting_loan_standardized_version\src\config\navigation.ts
+  13:3  warning  'Bell' is defined but never used      @typescript-eslint/no-unused-vars
+  14:3  warning  'Download' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\manzi\accouting_loan_standardized_version\src\data\mock\loans.ts
+  144:75  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\manzi\accouting_loan_standardized_version\src\services\mock\expense.service.ts
+  1:19  warning  'ExpenseCategory' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\manzi\accouting_loan_standardized_version\src\types\approval.ts
+  14:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\manzi\accouting_loan_standardized_version\src\types\form.ts
+  32:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  36:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  42:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\manzi\accouting_loan_standardized_version\src\types\report.ts
+  1:10  warning  'LucideIcon' is defined but never used  @typescript-eslint/no-unused-vars
+
+Γ£û 62 problems (20 errors, 42 warnings)
+
