@@ -32,7 +32,7 @@ export const navigationConfig: NavSection[] = [
   {
     title: "Accounting System",
     items: [
-      { title: "Dashboard", href: "/", icon: Layout },
+      { title: "Dashboard", href: "/dashboard", icon: Layout },
       { title: "General Ledger", href: "/general-ledger", icon: BookOpen },
       { title: "Chart of Accounts", href: "/accounts", icon: Table },
       { title: "Expenditures", href: "/expenses", icon: Receipt },
