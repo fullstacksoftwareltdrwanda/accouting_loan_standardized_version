@@ -2,7 +2,6 @@
 
 import React from "react";
 import Link from "next/link";
-import { BarChart } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface LogoProps {
@@ -10,7 +9,7 @@ interface LogoProps {
   iconSize?: number;
   textSize?: string;
   isLink?: boolean;
-  variant?: "default" | "light";
+  variant?: "default" | "light" | "compact";
 }
 
 export const Logo: React.FC<LogoProps> = ({
@@ -24,19 +23,21 @@ export const Logo: React.FC<LogoProps> = ({
     <div className={cn("flex items-center gap-2.5", className)}>
       <div 
         className={cn(
-          "rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center shadow-md shadow-indigo-500/15 transition-transform hover:scale-105",
+          "rounded-[12px] bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center shadow-md transition-transform hover:scale-105",
           iconSize <= 20 ? "w-8 h-8" : "w-10 h-10"
         )}
       >
-        <BarChart className="text-white" size={iconSize} />
+        <span className="text-white font-bold" style={{ fontSize: iconSize * 0.65 }}>A</span>
       </div>
-      <span className={cn(
-        "font-bold tracking-tight uppercase",
-        textSize,
-        variant === "default" ? "text-zinc-800" : "text-white"
-      )}>
-        ALMS<span className="text-indigo-500">.</span>
-      </span>
+      {variant !== "compact" && (
+        <span className={cn(
+          "font-bold tracking-tight",
+          textSize,
+          variant === "default" ? "text-[var(--text-primary)]" : "text-white"
+        )}>
+          ALMS<span className="text-teal-500">.</span>
+        </span>
+      )}
     </div>
   );
 

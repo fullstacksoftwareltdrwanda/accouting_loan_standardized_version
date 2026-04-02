@@ -20,8 +20,8 @@ export default function LoginPage() {
       <section className="flex-1 flex flex-col items-center justify-center p-6 md:p-12 lg:p-20 relative bg-[#050505]">
         {/* Background visual element for mobile or subtle enhancement */}
         <div className="absolute top-0 right-0 w-full h-full pointer-events-none overflow-hidden">
-            <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-600/5 blur-[120px] rounded-full" />
-            <div className="absolute bottom-[10%] left-[-10%] w-[30%] h-[30%] bg-violet-600/5 blur-[100px] rounded-full" />
+            <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-teal-600/5 blur-[120px] rounded-full" />
+            <div className="absolute bottom-[10%] left-[-10%] w-[30%] h-[30%] bg-emerald-600/5 blur-[100px] rounded-full" />
         </div>
 
         {/* Mobile Branding (only visible on small screens) */}

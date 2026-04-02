@@ -2,8 +2,73 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8f9fb;
-  --foreground: #1a1a2e;
+  /* ═══════════════════════════════════════════
+     ALMS DESIGN SYSTEM — "Financial OS" 
+     A premium palette that feels alive
+  ═══════════════════════════════════════════ */
+  
+  /* Surfaces */
+  --bg-canvas: #F6F8FB;
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #FFFFFF;
+  --bg-sunken: #F0F3F8;
+  --bg-hover: #F4F6FA;
+  
+  /* Text */
+  --text-primary: #0F1A2E;
+  --text-secondary: #5A6B8A;
+  --text-tertiary: #8E9BB9;
+  --text-disabled: #B8C4DB;
+  
+  /* Borders */
+  --border-default: #E2E8F2;
+  --border-subtle: #EEF1F6;
+  --border-strong: #CBD5E1;
+  
+  /* Brand — Deep Teal */
+  --accent-primary: #0D9488;
+  --accent-primary-hover: #0F766E;
+  --accent-primary-light: #CCFBF1;
+  --accent-primary-muted: #99F6E4;
+  --accent-primary-ghost: #F0FDFA;
+  
+  /* Indigo accent */
+  --accent-secondary: #6366F1;
+  --accent-secondary-light: #E0E7FF;
+  
+  /* Status */
+  --status-success: #059669;
+  --status-success-light: #ECFDF5;
+  --status-warning: #D97706;
+  --status-warning-light: #FFFBEB;
+  --status-danger: #DC2626;
+  --status-danger-light: #FEF2F2;
+  --status-info: #2563EB;
+  --status-info-light: #EFF6FF;
+  
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(15, 26, 46, 0.04);
+  --shadow-sm: 0 1px 3px rgba(15, 26, 46, 0.06), 0 1px 2px rgba(15, 26, 46, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(15, 26, 46, 0.06), 0 2px 4px -1px rgba(15, 26, 46, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 26, 46, 0.05), 0 4px 6px -2px rgba(15, 26, 46, 0.03);
+  --shadow-xl: 0 20px 25px -5px rgba(15, 26, 46, 0.05), 0 10px 10px -5px rgba(15, 26, 46, 0.02);
+  --shadow-glow-teal: 0 0 20px rgba(13, 148, 136, 0.15);
+  --shadow-glow-indigo: 0 0 20px rgba(99, 102, 241, 0.12);
+  
+  /* Sidebar */
+  --sidebar-width: 72px;
+  --header-height: 64px;
+  
+  /* Foreground/Background for Tailwind compat */
+  --background: var(--bg-canvas);
+  --foreground: var(--text-primary);
 }
 
 @theme inline {
@@ -13,23 +78,33 @@
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 
-/* Override dark mode to require a specific class, keeping the app strictly in light mode by default */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ═══════════════════════════════
+   BASE STYLES
+═══════════════════════════════ */
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg-canvas);
+  color: var(--text-primary);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 13px;
-  line-height: 1.5;
+  font-size: 14px;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
 }
 
-/* Refined scrollbars */
+/* Safe area for notched devices */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ═══════════════════════════════
+   PREMIUM SCROLLBARS
+═══════════════════════════════ */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -37,20 +112,120 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d4d4d8;
+  background: var(--border-default);
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a1a1aa;
+  background: var(--text-tertiary);
 }
 
-/* Compact table styling */
-table {
-  font-size: 12.5px;
-}
-
-/* Smooth transitions globally */
+/* ═══════════════════════════════
+   GLOBAL TRANSITIONS
+═══════════════════════════════ */
 *, *::before, *::after {
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ═══════════════════════════════
+   FOCUS RING — branded teal
+═══════════════════════════════ */
+*:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ═══════════════════════════════
+   SELECTION — branded
+═══════════════════════════════ */
+::selection {
+  background: var(--accent-primary-muted);
+  color: var(--text-primary);
+}
+
+/* ═══════════════════════════════
+   TABLE BASE
+═══════════════════════════════ */
+table {
+  font-size: 13.5px;
+}
+
+/* ═══════════════════════════════
+   ANIMATION KEYFRAMES
+═══════════════════════════════ */
+@keyframes float-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes slide-indicator {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-float-in {
+  animation: float-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+/* Stagger children animations */
+.stagger-children > * {
+  animation: float-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 50ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 100ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 150ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 200ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 250ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 350ms; }
+.stagger-children > *:nth-child(9) { animation-delay: 400ms; }
+
+/* ═══════════════════════════════
+   SIDEBAR NAV TOOLTIP
+═══════════════════════════════ */
+.nav-tooltip {
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%) scale(0.95);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.15s cubic-bezier(0.22, 1, 0.36, 1);
+  white-space: nowrap;
+  z-index: 100;
+}
+
+.nav-item:hover .nav-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+/* ═══════════════════════════════
+   HEADER NAV ICON TOOLTIP
+═══════════════════════════════ */
+.header-nav-icon:hover .header-nav-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
 }

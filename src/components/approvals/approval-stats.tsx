@@ -5,36 +5,28 @@ import {
   Clock, 
   CheckCircle2, 
   XCircle, 
-  Activity
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface StatCardProps {
+interface ApprovalStatCardProps {
   label: string;
   value: number;
   icon: React.ElementType;
-  className?: string;
-  iconColor: string;
+  color: string;
 }
 
-const StatCard = ({ label, value, icon: Icon, className, iconColor }: StatCardProps) => (
-  <div className={cn(
-    "flex-1 bg-white p-8 rounded-[32px] border border-zinc-100 shadow-2xl shadow-zinc-200/40 flex items-center justify-between group hover:border-zinc-200 transition-all duration-500",
-    className
-  )}>
-    <div className="space-y-2">
-      <p className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-400 group-hover:text-zinc-500 transition-colors">
+const ApprovalStatCard = ({ label, value, icon: Icon, color }: ApprovalStatCardProps) => (
+  <div className="bg-white p-5 rounded-2xl border border-[var(--border-subtle)] shadow-[var(--shadow-xs)] flex items-center gap-4 transition-all hover:shadow-[var(--shadow-sm)] hover:-translate-y-0.5">
+    <div className={cn("h-10 w-10 rounded-xl flex items-center justify-center", color)}>
+      <Icon className="h-5 w-5" />
+    </div>
+    <div>
+      <p className="text-[12px] font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
         {label}
       </p>
-      <h3 className="text-4xl font-black text-[#1a365d] tracking-tighter">
+      <h3 className="text-2xl font-bold text-[var(--text-primary)] tracking-tight">
         {value}
       </h3>
-    </div>
-    <div className={cn(
-      "h-14 w-14 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 group-hover:rotate-3 shadow-lg",
-      iconColor
-    )}>
-      <Icon className="h-7 w-7 text-white" />
     </div>
   </div>
 );
@@ -49,24 +41,24 @@ export function ApprovalStats({
   rejectedCount?: number; 
 }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <StatCard 
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 stagger-children">
+      <ApprovalStatCard 
         label="Pending Review" 
         value={pendingCount} 
         icon={Clock} 
-        iconColor="bg-amber-500"
+        color="bg-amber-50 text-amber-600"
       />
-      <StatCard 
+      <ApprovalStatCard 
         label="Approved" 
         value={approvedCount} 
         icon={CheckCircle2} 
-        iconColor="bg-emerald-500"
+        color="bg-emerald-50 text-emerald-600"
       />
-      <StatCard 
+      <ApprovalStatCard 
         label="Rejected" 
         value={rejectedCount} 
         icon={XCircle} 
-        iconColor="bg-rose-500"
+        color="bg-rose-50 text-rose-600"
       />
     </div>
   );

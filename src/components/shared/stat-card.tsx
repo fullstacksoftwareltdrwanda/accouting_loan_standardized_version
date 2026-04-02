@@ -9,49 +9,47 @@ interface StatCardProps {
   title: string;
   value: number;
   icon: LucideIcon;
-  color?: "blue" | "indigo" | "emerald" | "amber" | "red" | "violet";
+  color?: "teal" | "indigo" | "emerald" | "amber" | "rose" | "blue" | "violet" | "red";
   isCurrency?: boolean;
   className?: string;
 }
+
+const colorMap: Record<string, { icon: string; accent: string }> = {
+  teal:    { icon: "text-teal-600",    accent: "text-teal-600" },
+  indigo:  { icon: "text-indigo-500",  accent: "text-indigo-600" },
+  emerald: { icon: "text-emerald-600", accent: "text-emerald-600" },
+  amber:   { icon: "text-amber-600",   accent: "text-amber-600" },
+  rose:    { icon: "text-rose-500",    accent: "text-rose-600" },
+  blue:    { icon: "text-blue-600",    accent: "text-blue-600" },
+  violet:  { icon: "text-violet-600",  accent: "text-violet-600" },
+  red:     { icon: "text-rose-500",    accent: "text-rose-600" },
+};
 
 export const StatCard = ({
   title,
   value,
   icon: Icon,
-  color = "indigo",
+  color = "teal",
   isCurrency = true,
   className,
 }: StatCardProps) => {
-  const colorMap = {
-    blue: "text-blue-600 bg-blue-50",
-    indigo: "text-indigo-600 bg-indigo-50",
-    emerald: "text-emerald-600 bg-emerald-50",
-    amber: "text-amber-600 bg-amber-50",
-    red: "text-red-600 bg-red-50",
-    violet: "text-violet-600 bg-violet-50",
-  };
+  const colors = colorMap[color] || colorMap.teal;
 
   return (
     <div className={cn(
-      "group p-4 rounded-xl bg-white border border-zinc-100 shadow-sm transition-all hover:shadow-md",
+      "group p-5 rounded-2xl bg-white border border-[var(--border-subtle)] transition-all duration-300",
+      "hover:shadow-md hover:-translate-y-0.5",
       className
     )}>
-      <div className="flex items-center justify-between mb-3">
-        <div className={cn(
-          "p-2 rounded-lg transition-transform group-hover:scale-105",
-          colorMap[color]
-        )}>
-          <Icon className="w-4 h-4" />
-        </div>
-      </div>
-      <div className="space-y-0.5">
-        <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
+      <div className="flex items-center gap-3 mb-4">
+        <Icon className={cn("w-5 h-5", colors.icon)} />
+        <p className="text-[12px] font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
           {title}
         </p>
-        <p className="text-lg font-bold text-zinc-800">
-          {isCurrency ? formatCurrency(value) : value.toLocaleString()}
-        </p>
       </div>
+      <p className={cn("text-2xl font-bold tracking-tight", colors.accent)}>
+        {isCurrency ? formatCurrency(value) : value.toLocaleString()}
+      </p>
     </div>
   );
 };

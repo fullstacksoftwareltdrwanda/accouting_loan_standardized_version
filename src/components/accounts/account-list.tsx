@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { List } from "lucide-react";
 import { GLAccount } from "@/types/account";
 import { DataTable } from "@/components/table/data-table";
 import { accountColumns, getAccountActions } from "./account-columns";
@@ -21,45 +20,30 @@ export function AccountList({ accounts, isLoading }: AccountListProps) {
   const columns = accountColumns(actions);
 
   return (
-    <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm">
-      {/* Header */}
-      <div className="flex items-center justify-between bg-[#5c636a] px-4 py-2.5 text-white">
-        <div className="flex items-center gap-2">
-          <List className="h-4 w-4" />
-          <h3 className="text-sm font-bold uppercase tracking-wider">Accounts List</h3>
-        </div>
-        <div className="rounded bg-white/20 px-2 py-0.5 text-[11px] font-bold">
+    <div className="bg-white rounded-2xl border border-[var(--border-subtle)] shadow-[var(--shadow-xs)] overflow-hidden">
+      <div className="px-6 py-4 border-b border-[var(--border-subtle)] flex items-center justify-between">
+        <h3 className="text-[14px] font-semibold text-[var(--text-primary)]">Chart of Accounts</h3>
+        <span className="text-[12px] font-medium text-[var(--text-tertiary)] bg-[var(--bg-sunken)] px-3 py-1 rounded-lg">
           {accounts.length} accounts
-        </div>
+        </span>
       </div>
-
-      {/* Table Area */}
-      <div className="p-0">
-        <style jsx global>{`
-          .accounts-table thead tr {
-            border-top: 2px solid #3b82f6 !important;
-          }
-        `}</style>
-        <div className="accounts-table">
-          <DataTable 
-            columns={columns} 
-            data={accounts} 
-            isLoading={isLoading} 
-            filterColumn="name"
-            filterPlaceholder="Search by account name or code..."
-            emptyStateTitle="Empty Chart of Accounts"
-            emptyStateDescription="No accounts have been defined yet. Start by building your financial ledger structure."
-            emptyStateAction={
-              <Button 
-                onClick={() => document.getElementById('add-account-btn')?.click()}
-                className="h-12 px-8 bg-[#5c636a] hover:bg-zinc-700 text-white rounded-2xl font-black uppercase text-[12px] tracking-widest gap-3 shadow-xl"
-              >
-                Create Your First Account
-              </Button>
-            }
-          />
-        </div>
-      </div>
+      <DataTable 
+        columns={columns} 
+        data={accounts} 
+        isLoading={isLoading} 
+        filterColumn="name"
+        filterPlaceholder="Search accounts..."
+        emptyStateTitle="Empty Chart of Accounts"
+        emptyStateDescription="No accounts defined yet. Build your financial ledger structure to get started."
+        emptyStateAction={
+          <Button 
+            onClick={() => document.getElementById('add-account-btn')?.click()}
+            className="h-10 px-6 bg-[var(--accent-primary)] hover:bg-[var(--accent-primary-hover)] text-white rounded-xl font-medium text-[13px] gap-2 shadow-sm"
+          >
+            Create First Account
+          </Button>
+        }
+      />
     </div>
   );
 }

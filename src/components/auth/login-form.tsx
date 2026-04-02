@@ -93,12 +93,12 @@ export const LoginForm = () => {
               Username or Email
             </Label>
             <div className="relative group">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-indigo-400 transition-colors" />
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-teal-400 transition-colors" />
               <Input
                 id="identifier"
                 placeholder="Enter your username or email"
                 className={cn(
-                  "pl-10 bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-600 focus:ring-indigo-500/20 focus:border-indigo-500/50 transition-all h-12",
+                  "pl-10 bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-600 focus:ring-teal-500/20 focus:border-teal-500/50 transition-all h-12",
                   errors.identifier && "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/10"
                 )}
                 {...register("identifier")}
@@ -118,19 +118,19 @@ export const LoginForm = () => {
               </Label>
               <button
                 type="button"
-                className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors font-medium"
+                className="text-xs text-teal-400 hover:text-teal-300 transition-colors font-medium"
               >
                 Forgot password?
               </button>
             </div>
             <div className="relative group">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-indigo-400 transition-colors" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-teal-400 transition-colors" />
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 className={cn(
-                  "pl-10 pr-10 bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-600 focus:ring-indigo-500/20 focus:border-indigo-500/50 transition-all h-12",
+                  "pl-10 pr-10 bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-600 focus:ring-teal-500/20 focus:border-teal-500/50 transition-all h-12",
                   errors.password && "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/10"
                 )}
                 {...register("password")}
@@ -159,7 +159,7 @@ export const LoginForm = () => {
         <div className="flex items-center space-x-2">
           <Checkbox 
             id="rememberMe" 
-            className="border-zinc-700 bg-zinc-900 data-[state=checked]:bg-indigo-600 data-[state=checked]:border-indigo-600"
+            className="border-zinc-700 bg-zinc-900 data-[state=checked]:bg-teal-600 data-[state=checked]:border-teal-600"
             onCheckedChange={(checked) => {
               // Note: react-hook-form doesn't automatically handle custom components' onCheckedChange unless using Controller
               // but for this mock we can just use the register or a small hack.
@@ -176,7 +176,7 @@ export const LoginForm = () => {
         {/* Submit Button */}
         <Button
           type="submit"
-          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold h-12 rounded-xl shadow-lg shadow-indigo-600/20 active:scale-[0.98] transition-all disabled:opacity-70"
+          className="w-full bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 text-white font-bold h-12 rounded-xl shadow-lg shadow-teal-600/20 active:scale-[0.98] transition-all disabled:opacity-70"
           disabled={isLoading}
         >
           {isLoading ? (

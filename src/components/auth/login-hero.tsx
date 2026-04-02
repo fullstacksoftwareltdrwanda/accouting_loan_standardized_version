@@ -9,8 +9,8 @@ export const LoginHero = () => {
     <div className="relative h-full w-full overflow-hidden bg-zinc-950 flex flex-col justify-between p-12 lg:p-16">
       {/* ... (background remains the same) */}
       <div className="absolute top-0 left-0 w-full h-full">
-        <div className="absolute top-[10%] left-[-20%] w-[80%] h-[80%] bg-indigo-600/20 blur-[120px] rounded-full opacity-50" />
-        <div className="absolute bottom-0 right-[-10%] w-[60%] h-[60%] bg-violet-600/10 blur-[100px] rounded-full opacity-30" />
+        <div className="absolute top-[10%] left-[-20%] w-[80%] h-[80%] bg-teal-600/20 blur-[120px] rounded-full opacity-50" />
+        <div className="absolute bottom-0 right-[-10%] w-[60%] h-[60%] bg-emerald-600/10 blur-[100px] rounded-full opacity-30" />
         
         {/* Grid pattern overlay */}
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 contrast-150 brightness-100" />
@@ -43,7 +43,7 @@ export const LoginHero = () => {
         >
           <h2 className="text-4xl lg:text-5xl font-extrabold text-white leading-[1.1] mb-6">
             The standard for <br/> 
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-violet-400">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-emerald-400">
               financial operations.
             </span>
           </h2>
@@ -67,7 +67,7 @@ export const LoginHero = () => {
                 className="flex items-center gap-3"
               >
                 <div className="p-2 rounded-lg bg-white/5 border border-white/10">
-                  <feature.icon className="w-4 h-4 text-indigo-400" />
+                  <feature.icon className="w-4 h-4 text-teal-400" />
                 </div>
                 <span className="text-sm font-medium text-zinc-300">{feature.label}</span>
               </motion.div>

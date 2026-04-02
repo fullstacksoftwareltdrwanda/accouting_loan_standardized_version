@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Database, Search } from "lucide-react";
+import { Database } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface EmptyStateProps {
@@ -22,23 +22,23 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center p-12 text-center animate-in fade-in zoom-in-95 duration-500",
+        "flex flex-col items-center justify-center py-16 px-8 text-center animate-float-in",
         className
       )}
     >
-      <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 mb-6 shadow-inner">
+      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--bg-sunken)] mb-5">
         {icon || (
-          <Database className="h-10 w-10 text-zinc-200 dark:text-zinc-700" />
+          <Database className="h-7 w-7 text-[var(--text-disabled)]" />
         )}
       </div>
-      <h3 className="text-xl font-black tracking-tight text-[#1a365d] dark:text-blue-400 leading-tight uppercase">
+      <h3 className="text-lg font-semibold text-[var(--text-primary)] tracking-tight">
         {title}
       </h3>
-      <p className="mt-3 text-[13px] text-zinc-500 dark:text-zinc-400 max-w-[280px] mx-auto font-medium leading-relaxed italic">
+      <p className="mt-2 text-[13px] text-[var(--text-tertiary)] max-w-[300px] mx-auto leading-relaxed">
         {description}
       </p>
       {action && (
-        <div className="mt-8 transition-all hover:scale-105 active:scale-95">
+        <div className="mt-6">
           {action}
         </div>
       )}

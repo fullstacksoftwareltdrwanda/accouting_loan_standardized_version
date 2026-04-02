@@ -11,32 +11,34 @@ interface StatusFilterProps {
 
 export function LoanStatusFilter({ activeTab, onTabChange, counts }: StatusFilterProps) {
   const tabs = [
-    { label: "All Status", value: "all", count: counts.all || 0, color: "bg-blue-600" },
-    { label: "Active", value: "active", count: counts.active || 0, color: "bg-emerald-500" },
-    { label: "Overdue", value: "overdue", count: counts.overdue || 0, color: "bg-rose-500" },
-    { label: "Suspended", value: "suspended", count: counts.suspended || 0, color: "bg-amber-500" },
-    { label: "Closed", value: "closed", count: counts.closed || 0, color: "bg-zinc-500" },
-    { label: "Paid (Instalments)", value: "paid", count: counts.paid || 0, color: "bg-cyan-500" },
-    { label: "Unpaid (Instalments)", value: "unpaid", count: counts.unpaid || 0, color: "bg-zinc-400" },
+    { label: "All", value: "all", count: counts.all || 0 },
+    { label: "Active", value: "active", count: counts.active || 0 },
+    { label: "Overdue", value: "overdue", count: counts.overdue || 0 },
+    { label: "Suspended", value: "suspended", count: counts.suspended || 0 },
+    { label: "Closed", value: "closed", count: counts.closed || 0 },
+    { label: "Paid", value: "paid", count: counts.paid || 0 },
+    { label: "Unpaid", value: "unpaid", count: counts.unpaid || 0 },
   ];
 
   return (
-    <div className="flex flex-wrap items-center gap-2 p-1 rounded-2xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm w-fit">
+    <div className="flex flex-wrap items-center gap-1 p-1 rounded-xl bg-[var(--bg-sunken)] border border-[var(--border-subtle)] w-fit">
       {tabs.map((tab) => (
         <button
           key={tab.value}
           onClick={() => onTabChange(tab.value)}
           className={cn(
-            "flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95",
+            "flex items-center gap-2 px-3.5 py-2 rounded-lg text-[12px] font-medium transition-all duration-200",
             activeTab === tab.value 
-              ? "bg-white text-zinc-900 shadow-md transform -translate-y-[1px] dark:bg-zinc-800 dark:text-zinc-50" 
-              : "text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+              ? "bg-white text-[var(--text-primary)] shadow-sm" 
+              : "text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]"
           )}
         >
           {tab.label}
           <span className={cn(
-            "flex h-5 w-5 items-center justify-center rounded-full text-white text-[10px] font-black",
-            activeTab === tab.value ? tab.color : "bg-zinc-200 dark:bg-zinc-800 text-zinc-400"
+            "flex h-5 min-w-5 items-center justify-center rounded-md px-1 text-[10px] font-semibold",
+            activeTab === tab.value 
+              ? "bg-[var(--accent-primary)] text-white" 
+              : "bg-[var(--bg-sunken)] text-[var(--text-tertiary)]"
           )}>
             {tab.count}
           </span>

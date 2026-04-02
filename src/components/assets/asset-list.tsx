@@ -2,13 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { 
-  Package, 
-  Search, 
   Plus, 
+  Search, 
   History,
-  LayoutGrid,
-  ChevronRight,
-  Home
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -58,86 +54,61 @@ export const AssetList = () => {
   const columns = assetColumns(actions);
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      {/* Header with Breadcrumbs & Actions */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="space-y-4">
-          <nav className="flex items-center gap-2 text-[13px] font-medium text-zinc-400">
-            <span className="text-zinc-400 flex items-center gap-1.5 hover:text-blue-500 transition-colors cursor-pointer">
-              <Home className="h-4 w-4" />
-              Home
-            </span>
-            <ChevronRight className="h-4 w-4" />
-            <span className="text-zinc-600 font-semibold">Dashboard</span>
-          </nav>
-          
-          <div className="flex items-center gap-3">
-             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 shadow-lg shadow-blue-900/20 text-white">
-                <LayoutGrid className="h-5 w-5" />
-             </div>
-             <h1 className="text-2xl font-black tracking-tight text-blue-600 uppercase">
-                Fixed Assets Register
-             </h1>
-          </div>
+    <div className="space-y-8 animate-float-in">
+      {/* Header */}
+      <div className="flex items-end justify-between">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] tracking-tight">
+            Fixed Assets Register
+          </h1>
+          <p className="text-[13px] text-[var(--text-tertiary)]">
+            Track company assets, depreciation, and current valuations
+          </p>
         </div>
-
-        <div className="flex items-center gap-3 self-end md:self-auto">
+        <div className="flex items-center gap-2">
           <Button 
             onClick={() => setIsDialogOpen(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-black h-10 shadow-lg shadow-blue-500/10 active:scale-95 transition-all"
+            className="h-10 px-5 bg-[var(--accent-primary)] hover:bg-[var(--accent-primary-hover)] text-white rounded-xl font-medium text-[13px] gap-2 shadow-sm transition-all active:scale-[0.98]"
           >
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus className="h-4 w-4" />
             Add Asset
           </Button>
-          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-black h-10 shadow-lg shadow-emerald-500/10 active:scale-95 transition-all">
-            <History className="mr-2 h-4 w-4" />
-            Record Monthly Dep.
+          <Button variant="outline" className="h-10 px-4 rounded-xl font-medium text-[13px] gap-2 border-[var(--border-default)] text-[var(--text-secondary)] transition-all active:scale-[0.98]">
+            <History className="h-4 w-4" />
+            Record Depreciation
           </Button>
         </div>
       </div>
 
-      {/* Stats Section */}
+      {/* Stats */}
       <AssetStatsSection assets={assets} />
 
-      {/* Registry Table Section */}
-      <div className="space-y-4">
-        {/* Search Bar */}
-        <div className="relative max-w-md group">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
-          <Input 
-            placeholder="Search assets..." 
-            className="pl-10 h-10 border-zinc-200 focus:ring-blue-500/10 focus:border-blue-400"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+      {/* Table */}
+      <div className="bg-white rounded-2xl border border-[var(--border-subtle)] shadow-[var(--shadow-xs)] overflow-hidden">
+        <div className="px-6 py-4 border-b border-[var(--border-subtle)] flex items-center justify-between">
+          <h3 className="text-[14px] font-semibold text-[var(--text-primary)]">Asset Registry</h3>
+          <span className="text-[12px] font-medium text-[var(--text-tertiary)] bg-[var(--bg-sunken)] px-3 py-1 rounded-lg">
+            {assets.length} assets
+          </span>
         </div>
-
-        <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm">
-          <div className="flex items-center gap-2 bg-zinc-50 border-b border-zinc-100 px-4 py-2.5">
-            <Package className="h-4 w-4 text-zinc-400" />
-            <h3 className="text-[12px] font-bold uppercase tracking-wider text-zinc-600">Assets Register</h3>
-          </div>
-          <div className="p-4 bg-zinc-50/20">
-            <DataTable 
-                columns={columns} 
-                data={assets} 
-                isLoading={isLoading}
-                filterColumn="item"
-                filterPlaceholder="Filter by item..."
-                emptyStateTitle="Empty Fixed Asset Register"
-                emptyStateDescription="No assets have been registered yet. Start by adding your first asset to the company inventory."
-                emptyStateAction={
-                  <Button 
-                    onClick={() => setIsDialogOpen(true)}
-                    className="h-12 px-8 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black uppercase text-[12px] tracking-widest gap-3 shadow-xl shadow-blue-500/20"
-                  >
-                    <Plus className="h-5 w-5" />
-                    Register Your First Asset
-                  </Button>
-                }
-            />
-          </div>
-        </div>
+        <DataTable 
+          columns={columns} 
+          data={assets} 
+          isLoading={isLoading}
+          filterColumn="item"
+          filterPlaceholder="Search assets..."
+          emptyStateTitle="Empty Asset Register"
+          emptyStateDescription="No assets registered yet. Add your first asset to begin tracking."
+          emptyStateAction={
+            <Button 
+              onClick={() => setIsDialogOpen(true)}
+              className="h-10 px-6 bg-[var(--accent-primary)] hover:bg-[var(--accent-primary-hover)] text-white rounded-xl font-medium text-[13px] gap-2 shadow-sm"
+            >
+              <Plus className="h-4 w-4" />
+              Register First Asset
+            </Button>
+          }
+        />
       </div>
 
       <AssetRegisterDialog 

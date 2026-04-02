@@ -30,6 +30,7 @@ import { TablePagination } from "./table-pagination";
 import { TableColumnToggle } from "./table-column-toggle";
 import { EmptyState } from "@/components/shared/empty-state";
 import { LoadingSkeleton } from "@/components/shared/loading-skeleton";
+import { Search } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -79,31 +80,34 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="w-full space-y-3">
+    <div className="w-full space-y-4">
+      {/* Toolbar */}
       <div className="flex items-center justify-between gap-3">
         {filterColumn && (
-          <div className="flex-1 max-w-xs">
+          <div className="flex-1 max-w-sm relative group">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-disabled)] group-focus-within:text-[var(--accent-primary)] transition-colors" />
             <Input
               placeholder={filterPlaceholder}
               value={(table.getColumn(filterColumn)?.getFilterValue() as string) ?? ""}
               onChange={(event) =>
                 table.getColumn(filterColumn)?.setFilterValue(event.target.value)
               }
-              className="h-8 rounded-lg text-[12px]"
+              className="h-9 pl-9 rounded-xl border-[var(--border-default)] bg-[var(--bg-surface)] text-[13px] focus:ring-2 focus:ring-[var(--accent-primary)]/10 focus:border-[var(--accent-primary)]"
             />
           </div>
         )}
         <TableColumnToggle table={table} />
       </div>
 
-      <div className="rounded-xl border border-zinc-100 bg-white shadow-sm overflow-hidden">
+      {/* Table */}
+      <div className="rounded-2xl border border-[var(--border-subtle)] bg-white overflow-hidden shadow-[var(--shadow-xs)]">
         <Table>
-          <TableHeader className="bg-zinc-50/60">
+          <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="hover:bg-transparent border-zinc-100">
+              <TableRow key={headerGroup.id} className="hover:bg-transparent border-b border-[var(--border-subtle)]">
                 {headerGroup.headers.map((header: Header<TData, unknown>) => {
                   return (
-                    <TableHead key={header.id} className="h-9 text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
+                    <TableHead key={header.id} className="h-11 px-4 text-[11px] font-medium uppercase tracking-wider text-[var(--text-tertiary)] bg-[var(--bg-sunken)]">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -128,10 +132,10 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="border-zinc-50 hover:bg-zinc-50/50 transition-colors"
+                  className="border-b border-[var(--border-subtle)] last:border-0 hover:bg-[var(--bg-hover)] transition-colors duration-150"
                 >
                   {row.getVisibleCells().map((cell: Cell<TData, unknown>) => (
-                    <TableCell key={cell.id} className="py-2.5">
+                    <TableCell key={cell.id} className="px-4 py-3.5 text-[13px]">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -142,7 +146,7 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-full py-20 text-center">
+                <TableCell colSpan={columns.length} className="h-full text-center">
                   <EmptyState 
                     title={emptyStateTitle}
                     description={emptyStateDescription}

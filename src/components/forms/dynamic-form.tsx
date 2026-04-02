@@ -24,7 +24,6 @@ export function DynamicForm({
   isLoading,
   className,
 }: DynamicFormProps) {
-  // 1. Generate Zod Schema from config
   const schemaShape: Record<string, z.ZodTypeAny> = {};
   
   config.fields.forEach((field) => {
@@ -63,7 +62,6 @@ export function DynamicForm({
 
   const formSchema = z.object(schemaShape);
 
-  // 2. Initialize Form
   const methods = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: config.defaultValues || {},
@@ -72,14 +70,13 @@ export function DynamicForm({
   const { handleSubmit, watch } = methods;
   const currentValues = watch();
 
-  // 3. Group fields by section
   const sections = config.sections || [{ id: "default", title: "General Information" }];
   
   return (
     <FormProvider {...methods}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className={cn("space-y-8", className)}
+        className={cn("space-y-6", className)}
       >
         {sections.map((section) => (
           <FormSection
@@ -99,11 +96,11 @@ export function DynamicForm({
           </FormSection>
         ))}
 
-        <div className="flex items-center justify-end gap-4 mt-8">
+        <div className="flex items-center justify-end gap-3 pt-2">
           <Button
             type="submit"
             disabled={isLoading}
-            className="h-12 px-8 rounded-2xl bg-indigo-600 hover:bg-indigo-700 font-bold transition-all shadow-md hover:shadow-lg active:scale-95"
+            className="h-10 px-6 rounded-xl bg-[var(--accent-primary)] hover:bg-[var(--accent-primary-hover)] text-white font-medium text-[13px] transition-all shadow-sm active:scale-[0.98]"
           >
             {isLoading ? (
               <>

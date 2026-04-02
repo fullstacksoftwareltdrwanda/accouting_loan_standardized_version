@@ -3,6 +3,7 @@
 import React from "react";
 import { Package, TrendingDown, Wallet, LayoutGrid } from "lucide-react";
 import { Asset } from "@/types/asset";
+import { cn } from "@/lib/utils";
 
 interface AssetStatsSectionProps {
   assets: Asset[];
@@ -21,61 +22,54 @@ export const AssetStatsSection = ({ assets }: AssetStatsSectionProps) => {
     {
       title: "Total Assets",
       value: totalAssets.toString(),
-      borderColor: "border-blue-500",
-      textColor: "text-blue-600",
       icon: LayoutGrid,
+      color: "text-blue-600",
       badges: [
-        { label: "Active", value: activeAssets, color: "bg-emerald-500" },
-        { label: "Disposed", value: disposedAssets, color: "bg-rose-500" },
+        { label: "Active", value: activeAssets, color: "bg-emerald-50 text-emerald-700" },
+        { label: "Disposed", value: disposedAssets, color: "bg-rose-50 text-rose-600" },
       ]
     },
     {
-      title: "Total Acquisition Value",
+      title: "Acquisition Value",
       value: `Rwf ${totalAcquisition.toLocaleString()}`,
-      borderColor: "border-emerald-500",
-      textColor: "text-emerald-600",
       icon: Package,
+      color: "text-emerald-600",
     },
     {
-      title: "Current Book Value",
+      title: "Book Value",
       value: `Rwf ${totalBookValue.toLocaleString()}`,
-      borderColor: "border-cyan-500",
-      textColor: "text-cyan-600",
       icon: Wallet,
+      color: "text-teal-600",
     },
     {
-      title: "Accumulated Depreciation",
+      title: "Accumulated Dep.",
       value: `Rwf ${totalAccumDep.toLocaleString()}`,
-      borderColor: "border-amber-400",
-      textColor: "text-amber-500",
       icon: TrendingDown,
+      color: "text-amber-600",
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
       {stats.map((stat) => (
         <div 
-            key={stat.title} 
-            className={`bg-white p-5 rounded-xl border-2 ${stat.borderColor} shadow-sm space-y-4 min-h-[140px] flex flex-col justify-between`}
+          key={stat.title} 
+          className="bg-white p-5 rounded-2xl border border-[var(--border-subtle)] shadow-[var(--shadow-xs)] space-y-3 transition-all hover:shadow-[var(--shadow-sm)] hover:-translate-y-0.5"
         >
-          <div className="space-y-1">
-            <p className="text-[12px] font-bold text-zinc-500 uppercase tracking-wider">{stat.title}</p>
-            <p className={`text-2xl font-black ${stat.textColor}`}>{stat.value}</p>
+          <div className="flex items-center gap-3">
+            <stat.icon className={cn("h-5 w-5", stat.color)} />
+            <p className="text-[12px] font-medium text-[var(--text-tertiary)] uppercase tracking-wider">{stat.title}</p>
           </div>
+          <p className={cn("text-2xl font-bold tracking-tight", stat.color)}>{stat.value}</p>
           
-          {stat.badges ? (
+          {stat.badges && (
             <div className="flex gap-2">
-                {stat.badges.map(b => (
-                    <div key={b.label} className={`${b.color} px-2 py-0.5 rounded text-[10px] font-black text-white uppercase`}>
-                        {b.label}: {b.value}
-                    </div>
-                ))}
+              {stat.badges.map(b => (
+                <span key={b.label} className={cn("px-2 py-0.5 rounded-lg text-[10px] font-semibold", b.color)}>
+                  {b.label}: {b.value}
+                </span>
+              ))}
             </div>
-          ) : (
-             <div className="flex justify-end opacity-20">
-                <stat.icon className="h-10 w-10" />
-             </div>
           )}
         </div>
       ))}

@@ -9,6 +9,7 @@ interface SectionCardProps {
   children: React.ReactNode;
   action?: React.ReactNode;
   className?: string;
+  noPadding?: boolean;
 }
 
 export const SectionCard = ({
@@ -17,19 +18,20 @@ export const SectionCard = ({
   children,
   action,
   className,
+  noPadding = false,
 }: SectionCardProps) => {
   return (
     <div className={cn(
-      "bg-white border border-zinc-100 rounded-xl overflow-hidden shadow-sm",
+      "bg-white border border-[var(--border-subtle)] rounded-2xl overflow-hidden shadow-[var(--shadow-xs)] transition-shadow hover:shadow-[var(--shadow-sm)]",
       className
     )}>
-      <div className="px-4 py-3.5 border-b border-zinc-100 flex items-center justify-between">
+      <div className="px-6 py-4 flex items-center justify-between">
         <div className="space-y-0.5">
-          <h3 className="text-sm font-semibold tracking-tight text-zinc-800">
+          <h3 className="text-[15px] font-semibold text-[var(--text-primary)] tracking-tight">
             {title}
           </h3>
           {subtitle && (
-            <p className="text-[11px] text-zinc-400">
+            <p className="text-[12px] text-[var(--text-tertiary)]">
               {subtitle}
             </p>
           )}
@@ -40,7 +42,7 @@ export const SectionCard = ({
           </div>
         )}
       </div>
-      <div className="p-4">
+      <div className={noPadding ? "" : "px-6 pb-6"}>
         {children}
       </div>
     </div>

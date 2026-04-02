@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Plus, ReceiptText } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Expense } from "@/types/expense";
 import { getExpenses, createExpense } from "@/services/mock/expense.service";
 import { DataTable } from "@/components/table/data-table";
@@ -24,7 +24,6 @@ export function ExpenseList() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Load expenses
   useEffect(() => {
     const load = async () => {
       try {
@@ -39,7 +38,6 @@ export function ExpenseList() {
     load();
   }, []);
 
-  // Handlers
   const handleLogExpense = async (data: any) => {
     setIsSubmitting(true);
     try {
@@ -61,33 +59,33 @@ export function ExpenseList() {
   const columns = expenseColumns(actions);
 
   return (
-    <div className="space-y-8 max-w-7xl">
-      {/* Header Area */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="space-y-8 animate-float-in">
+      {/* Page Header */}
+      <div className="flex items-end justify-between">
         <div className="space-y-1">
-          <h2 className="text-3xl font-black tracking-tight text-zinc-900 dark:text-zinc-50 font-sans">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] tracking-tight">
             Business Expenditures
-          </h2>
-          <p className="text-zinc-500 font-sans dark:text-zinc-400">
-            Monitor cash outflows, categorize costs, and manage fixed/variable expenses.
+          </h1>
+          <p className="text-[13px] text-[var(--text-tertiary)]">
+            Monitor cash outflows, categorize costs, and manage expenses
           </p>
         </div>
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="h-12 px-6 rounded-2xl bg-indigo-600 hover:bg-indigo-700 font-black shadow-md transition-all active:scale-95">
-              <Plus className="mr-2 h-5 w-5" />
+            <Button className="h-10 px-5 bg-[var(--accent-primary)] hover:bg-[var(--accent-primary-hover)] text-white rounded-xl font-medium text-[13px] gap-2 shadow-sm transition-all active:scale-[0.98]">
+              <Plus className="h-4 w-4" />
               Log Expense
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-black">Log Business Expenditure</DialogTitle>
-              <DialogDescription>
+              <DialogTitle className="text-xl font-bold text-[var(--text-primary)]">Log Business Expenditure</DialogTitle>
+              <DialogDescription className="text-[var(--text-tertiary)]">
                 Record a new expense. Ensure the GL Account matches the Chart of Accounts.
               </DialogDescription>
             </DialogHeader>
-            <div className="py-6">
+            <div className="py-4">
               <DynamicForm 
                 config={LOG_EXPENSE_FORM_CONFIG} 
                 onSubmit={handleLogExpense} 
@@ -98,23 +96,29 @@ export function ExpenseList() {
         </Dialog>
       </div>
 
-      {/* Table Area */}
-      <div className="bg-white p-6 rounded-[32px] border border-zinc-200 shadow-sm dark:bg-zinc-950/40 dark:border-zinc-800">
+      {/* Table */}
+      <div className="bg-white rounded-2xl border border-[var(--border-subtle)] shadow-[var(--shadow-xs)] overflow-hidden">
+        <div className="px-6 py-4 border-b border-[var(--border-subtle)] flex items-center justify-between">
+          <h3 className="text-[14px] font-semibold text-[var(--text-primary)]">Expenditure Log</h3>
+          <span className="text-[12px] font-medium text-[var(--text-tertiary)] bg-[var(--bg-sunken)] px-3 py-1 rounded-lg">
+            {expenses.length} records
+          </span>
+        </div>
         <DataTable 
           columns={columns} 
           data={expenses} 
           isLoading={isLoading} 
           filterColumn="description"
-          filterPlaceholder="Search expenditures by description or ref..."
+          filterPlaceholder="Search expenditures..."
           emptyStateTitle="No Expenditures Found"
-          emptyStateDescription="Your business expense log is currently empty. Record your first cash outflow to begin tracking costs."
+          emptyStateDescription="Your expense log is empty. Record your first cash outflow to begin tracking costs."
           emptyStateAction={
             <Button 
               onClick={() => setIsDialogOpen(true)}
-              className="h-12 px-8 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black uppercase text-[12px] tracking-widest gap-3 shadow-xl shadow-indigo-500/20"
+              className="h-10 px-6 bg-[var(--accent-primary)] hover:bg-[var(--accent-primary-hover)] text-white rounded-xl font-medium text-[13px] gap-2 shadow-sm"
             >
-              <Plus className="h-5 w-5" />
-              Log Your First Expense
+              <Plus className="h-4 w-4" />
+              Log First Expense
             </Button>
           }
         />
