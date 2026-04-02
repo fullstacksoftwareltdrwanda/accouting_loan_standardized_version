@@ -1,4 +1,11 @@
-export type CustomerStatus = "APPROVED" | "PENDING" | "REJECTED";
+export type CustomerStatus = "APPROVED" | "PENDING" | "REJECTED" | "ACTIVE" | "OVERDUE" | "INACTIVE";
+
+export interface CustomerFinancials {
+  totalLoans: number;
+  activeBalance: number;
+  totalPaid: number;
+  onTimeRepaymentRate: number;
+}
 
 export interface Customer {
   id: string;
@@ -37,4 +44,7 @@ export interface Customer {
   project?: string;
   projectLocation?: string;
   collateralLocation?: string;
+  
+  // Financial Summary
+  financials: CustomerFinancials;
 }

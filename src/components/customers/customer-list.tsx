@@ -44,7 +44,13 @@ export const CustomerList = () => {
       fatherName: "John Doe",
       motherName: "Jane Doe",
       maritalStatus: "Single",
-      hasGuarantor: false
+      hasGuarantor: false,
+      financials: {
+        totalLoans: 0,
+        activeBalance: 0,
+        totalPaid: 0,
+        onTimeRepaymentRate: 0
+      }
     }
   ];
 

@@ -41,8 +41,8 @@ export const customerColumns = (
 ): ColumnDef<Customer>[] => [
   {
     // Hidden column used purely for name-based filtering
-    id: "firstName",
-    accessorFn: (row) => `${row.firstName} ${row.lastName} ${row.email}`,
+    id: "name",
+    accessorFn: (row) => `${row.name} ${row.email}`,
     header: () => null,
     cell: () => null,
     enableHiding: false,
@@ -52,15 +52,15 @@ export const customerColumns = (
     header: "Customer",
     cell: ({ row }) => {
       const customer = row.original;
-      const initials = `${customer.firstName[0]}${customer.lastName[0]}`;
+      const initials = customer.name.split(" ").map(n => n[0]).join("");
       return (
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100 font-semibold text-[12px] text-zinc-600 border border-zinc-200">
-            {initials}
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100 font-semibold text-[12px] text-zinc-600 border border-zinc-200 uppercase">
+            {initials.slice(0, 2)}
           </div>
           <div className="flex flex-col">
             <span className="font-semibold text-zinc-800 text-[13px]">
-              {customer.firstName} {customer.lastName}
+              {customer.name}
             </span>
             <span className="text-[11px] text-zinc-400">{customer.email}</span>
           </div>
