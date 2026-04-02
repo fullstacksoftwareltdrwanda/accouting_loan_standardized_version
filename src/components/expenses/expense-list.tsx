@@ -106,6 +106,17 @@ export function ExpenseList() {
           isLoading={isLoading} 
           filterColumn="description"
           filterPlaceholder="Search expenditures by description or ref..."
+          emptyStateTitle="No Expenditures Found"
+          emptyStateDescription="Your business expense log is currently empty. Record your first cash outflow to begin tracking costs."
+          emptyStateAction={
+            <Button 
+              onClick={() => setIsDialogOpen(true)}
+              className="h-12 px-8 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black uppercase text-[12px] tracking-widest gap-3 shadow-xl shadow-indigo-500/20"
+            >
+              <Plus className="h-5 w-5" />
+              Log Your First Expense
+            </Button>
+          }
         />
       </div>
     </div>

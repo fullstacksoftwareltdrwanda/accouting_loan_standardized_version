@@ -8,6 +8,7 @@ import { DataTableAction } from "@/types/common";
 import { RowActions } from "@/components/table/row-actions";
 import { CheckCircle2, XCircle, FileText, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export const getApprovalActions = (
   onApprove: (req: ApprovalRequest) => void,
@@ -38,85 +39,129 @@ export const approvalColumns = (
   onQuickReject: (id: string) => void
 ): ColumnDef<ApprovalRequest>[] => [
   {
-    accessorKey: "date",
-    header: "Date",
-    cell: ({ row }) => <span className="font-sans text-xs text-zinc-500 font-bold">{row.getValue("date")}</span>,
+    accessorKey: "index",
+    header: "#",
+    cell: ({ row }) => (
+      <span className="text-[11px] font-black text-zinc-400 group-hover:text-zinc-600 transition-colors">
+        {row.index + 1}
+      </span>
+    ),
   },
   {
-    accessorKey: "title",
-    header: "Request Title",
+    accessorKey: "action",
+    header: "Action",
     cell: ({ row }) => (
       <div className="flex flex-col">
-        <span className="font-bold text-zinc-900 dark:text-zinc-50">{row.getValue("title")}</span>
-        <div className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-zinc-400">
-          <User className="h-3 w-3" />
-          By: {row.original.requester}
-        </div>
+        <span className="font-extrabold text-[12px] text-[#1a365d] dark:text-blue-400 uppercase tracking-tight">
+          {row.original.action}
+        </span>
+        <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{row.original.type}</span>
       </div>
     ),
   },
   {
-    accessorKey: "type",
-    header: "Type",
-    cell: ({ row }) => {
-      const type = row.getValue("type") as ApprovalType;
-      const colors: Record<ApprovalType, string> = {
-        Loan: "text-indigo-600 bg-indigo-50 dark:bg-indigo-900/10",
-        Expense: "text-rose-600 bg-rose-50 dark:bg-rose-900/10",
-        Account: "text-emerald-600 bg-emerald-50 dark:bg-emerald-900/10",
-        Adjustment: "text-amber-600 bg-amber-50 dark:bg-amber-900/10",
-      };
-      return (
-        <span className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${colors[type]}`}>
-          {type}
-        </span>
-      );
-    },
+    accessorKey: "description",
+    header: "Description",
+    cell: ({ row }) => (
+      <div className="max-w-[280px]">
+        <p className="text-[12px] font-medium text-zinc-600 dark:text-zinc-400 line-clamp-1 italic">
+          {row.original.description || row.original.title}
+        </p>
+      </div>
+    ),
   },
   {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Value</div>,
-    cell: ({ row }) => {
-      const amount = row.getValue("amount") as number | undefined;
-      return (
-        <div className="text-right font-mono font-black text-zinc-900 dark:text-zinc-50">
-          {amount ? formatCurrency(amount) : "--"}
-        </div>
-      );
-    },
+    accessorKey: "requester",
+    header: "Submitted By",
+    cell: ({ row }) => (
+       <div className="flex items-center gap-2 group/user">
+          <div className="h-7 w-7 rounded-lg bg-blue-50 flex items-center justify-center text-[10px] font-black text-blue-600 border border-blue-100 group-hover/user:bg-blue-600 group-hover/user:text-white transition-all">
+            {row.original.requester.charAt(0)}
+          </div>
+          <span className="text-[12px] font-bold text-zinc-700 dark:text-zinc-300">
+            {row.original.requester}
+          </span>
+       </div>
+    ),
+  },
+  {
+    accessorKey: "date",
+    header: "Date",
+    cell: ({ row }) => (
+       <span className="font-mono text-[11px] text-zinc-500 font-bold whitespace-nowrap">
+         {row.original.date}
+       </span>
+    ),
   },
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => <StatusBadge status={row.getValue("status")} />,
-  },
-  {
-    id: "quickActions",
-    header: () => <div className="text-center">Quick Decision</div>,
     cell: ({ row }) => {
-      if (row.original.status !== "pending") return null;
+      const status = row.original.status;
       return (
-        <div className="flex items-center justify-center gap-2">
-          <button 
-            onClick={() => onQuickApprove(row.original.id)}
-            className="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors"
-            title="Approve"
-          >
-            <CheckCircle2 className="h-5 w-5" />
-          </button>
-          <button 
-            onClick={() => onQuickReject(row.original.id)}
-            className="p-1.5 rounded-lg text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors"
-            title="Reject"
-          >
-            <XCircle className="h-5 w-5" />
-          </button>
+        <div className={cn(
+          "inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10px] font-black uppercase tracking-widest",
+          status === "pending" && "bg-amber-50 text-amber-600 border-amber-200",
+          status === "active" && "bg-emerald-50 text-emerald-600 border-emerald-200",
+          status === "inactive" && "bg-rose-50 text-rose-600 border-rose-200",
+        )}>
+          <div className={cn(
+            "h-1.5 w-1.5 rounded-full animate-pulse",
+            status === "pending" && "bg-amber-400",
+            status === "active" && "bg-emerald-400",
+            status === "inactive" && "bg-rose-400",
+          )} />
+          {status === "active" ? "Approved" : status === "inactive" ? "Rejected" : "Pending"}
         </div>
       );
     }
   },
   {
+    accessorKey: "reviewedBy",
+    header: "Reviewed By",
+    cell: ({ row }) => (
+       <span className="text-[11px] font-extrabold text-zinc-400 uppercase tracking-widest italic shrink-0">
+         {row.original.reviewedBy || "--"}
+       </span>
+    ),
+  },
+  {
     id: "actions",
-    cell: ({ row }) => <RowActions row={row} actions={actions} />,
+    header: "Actions",
+    cell: ({ row }) => {
+      if (row.original.status !== "pending") return (
+        <RowActions row={row} actions={actions} />
+      );
+      
+      return (
+        <div className="flex items-center gap-2">
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className="h-8 w-8 rounded-lg border-emerald-100 bg-emerald-50/50 hover:bg-emerald-600 hover:text-white text-emerald-600 transition-all active:scale-95 shadow-sm"
+            onClick={() => onQuickApprove(row.original.id)}
+            title="Approve"
+          >
+            <CheckCircle2 className="h-4 w-4" />
+          </Button>
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className="h-8 w-8 rounded-lg border-rose-100 bg-rose-50/50 hover:bg-rose-600 hover:text-white text-rose-600 transition-all active:scale-95 shadow-sm"
+            onClick={() => onQuickReject(row.original.id)}
+            title="Reject"
+          >
+            <XCircle className="h-4 w-4" />
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-8 w-8 text-zinc-400 hover:text-blue-600 transition-colors"
+          >
+            <FileText className="h-4 w-4" />
+          </Button>
+        </div>
+      );
+    },
   },
 ];

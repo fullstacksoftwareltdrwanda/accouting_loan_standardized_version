@@ -8,7 +8,10 @@ export type StatusType =
   | "overdue" 
   | "closed" 
   | "inactive"
-  | "settled";
+  | "settled"
+  | "suspended"
+  | "paid"
+  | "unpaid";
 
 export interface DataTableAction<TData> {
   label: string;

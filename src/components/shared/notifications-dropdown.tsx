@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Bell, Check, Info, AlertTriangle, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Notification, NotificationType } from "@/types/notification";
-import { getNotifications, markNotificationAsRead } from "@/services/mock/notification.service";
+import { getNotifications, markAsRead } from "@/services/mock/notification.service";
 import {
   Popover,
   PopoverContent,
@@ -37,7 +37,7 @@ export function NotificationsDropdown() {
 
   const handleMarkRead = async (id: string) => {
     try {
-      await markNotificationAsRead(id);
+      await markAsRead(id);
       setNotifications((prev) =>
         prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
       );

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { User, Search, Settings } from "lucide-react";
 import { BreadcrumbBar } from "./breadcrumb-bar";
 import { NotificationsDropdown } from "../shared/notifications-dropdown";
@@ -33,15 +34,22 @@ export const AppHeader = () => {
         <div className="h-5 w-px bg-zinc-200 mx-1.5" />
 
         {/* Profile */}
-        <div className="flex items-center gap-2.5 pl-1 cursor-pointer group">
+        <Link 
+          href="/profile"
+          className="flex items-center gap-3 pl-3 pr-1 py-1 rounded-xl hover:bg-zinc-100 transition-all group active:scale-95"
+        >
           <div className="flex flex-col items-end text-right">
-            <span className="text-[11px] font-semibold text-zinc-700 leading-tight">Admin User</span>
-            <span className="text-[9px] uppercase tracking-wider font-bold text-indigo-500">System Chief</span>
+            <div className="flex items-center gap-1.5 justify-end">
+               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.4)] animate-pulse" />
+               <span className="text-[10px] font-black text-emerald-600 uppercase tracking-tighter">Ecosystem Active</span>
+            </div>
+            <span className="text-[12px] font-black text-[#1a365d] leading-tight group-hover:text-blue-600 transition-colors">Director</span>
+            <span className="text-[9px] uppercase tracking-widest font-bold text-zinc-400">Company Director</span>
           </div>
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-100 to-indigo-50 border border-indigo-200/60 flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-            <User className="w-3.5 h-3.5 text-indigo-600" />
+          <div className="w-9 h-9 rounded-xl bg-[#1a365d] flex items-center justify-center shadow-lg shadow-blue-900/20 group-hover:rotate-3 transition-transform">
+             <span className="text-sm font-black text-white">D</span>
           </div>
-        </div>
+        </Link>
       </div>
     </header>
   );

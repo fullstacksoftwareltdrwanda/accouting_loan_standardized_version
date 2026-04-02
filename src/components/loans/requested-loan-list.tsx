@@ -25,32 +25,50 @@ export function RequestedLoanList() {
     load();
   }, []);
 
-  const actions = getRequestedLoanActions(
-    (ln: Loan) => console.log("Approve", ln),
-    (ln: Loan) => console.log("Reject", ln)
-  );
+  const actions = {
+    onView: (ln: Loan) => console.log("Approve", ln),
+    onEdit: (ln: Loan) => console.log("Approve", ln),
+    onDelete: (ln: Loan) => console.log("Reject", ln),
+  };
 
   const columns = requestedLoanColumns(actions);
 
   return (
-    <div className="space-y-8 max-w-7xl">
-      <div className="space-y-1">
-        <h2 className="text-3xl font-black tracking-tight text-zinc-900 dark:text-zinc-50 font-sans">
-          Requested Loans
-        </h2>
-        <p className="text-zinc-500 font-sans dark:text-zinc-400">
-          Review and verify new loan applications awaiting administrative approval.
+    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      {/* Page Header */}
+      <div className="space-y-3 px-1">
+        <div className="flex items-center gap-3">
+           <Clock className="h-6 w-6 text-blue-600" />
+           <h2 className="text-3xl font-black tracking-tighter text-zinc-900 dark:text-zinc-50 uppercase">
+             Requested Loans
+           </h2>
+        </div>
+        <p className="text-[13px] text-zinc-500 font-medium max-w-2xl leading-relaxed">
+          Manage and process new loan applications accurately. Review borrower documentation and verify financial eligibility before administrative approval.
         </p>
       </div>
 
-      <div className="bg-white p-6 rounded-[32px] border border-zinc-200 shadow-sm dark:bg-zinc-950/40 dark:border-zinc-800">
-        <DataTable 
-          columns={columns} 
-          data={loans} 
-          isLoading={isLoading} 
-          filterColumn="customerName"
-          filterPlaceholder="Search requested loans..."
-        />
+      {/* Main Table Section */}
+      <div className="bg-white rounded-[40px] border border-zinc-200 shadow-2xl shadow-zinc-200/50 overflow-hidden dark:bg-zinc-950 dark:border-zinc-800 dark:shadow-none">
+        <div className="px-8 py-5 border-b border-zinc-100 flex items-center justify-between bg-zinc-50/50 dark:bg-zinc-900/50 dark:border-zinc-800">
+           <div className="flex items-center gap-3">
+              <span className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
+              <h3 className="text-[13px] font-black uppercase tracking-widest text-[#1a365d] dark:text-blue-400">Active Requests</h3>
+           </div>
+           <div className="px-5 py-1.5 rounded-full bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest">
+             {loans.length} Total
+           </div>
+        </div>
+        
+        <div className="p-0">
+          <DataTable 
+            columns={columns} 
+            data={loans} 
+            isLoading={isLoading} 
+            filterColumn="customerName"
+            filterPlaceholder="Search by applicant name, requested code..."
+          />
+        </div>
       </div>
     </div>
   );

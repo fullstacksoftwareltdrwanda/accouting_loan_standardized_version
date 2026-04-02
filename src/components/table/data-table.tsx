@@ -38,6 +38,9 @@ interface DataTableProps<TData, TValue> {
   filterColumn?: string;
   filterPlaceholder?: string;
   initialColumnVisibility?: VisibilityState;
+  emptyStateTitle?: string;
+  emptyStateDescription?: string;
+  emptyStateAction?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
@@ -47,6 +50,9 @@ export function DataTable<TData, TValue>({
   filterColumn,
   filterPlaceholder = "Filter records...",
   initialColumnVisibility = {},
+  emptyStateTitle,
+  emptyStateDescription,
+  emptyStateAction,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -136,8 +142,12 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-20 text-center">
-                  <EmptyState />
+                <TableCell colSpan={columns.length} className="h-full py-20 text-center">
+                  <EmptyState 
+                    title={emptyStateTitle}
+                    description={emptyStateDescription}
+                    action={emptyStateAction}
+                  />
                 </TableCell>
               </TableRow>
             )}

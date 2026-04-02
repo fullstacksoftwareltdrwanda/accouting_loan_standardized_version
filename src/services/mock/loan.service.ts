@@ -2,40 +2,44 @@ import { Loan } from "@/types/loan";
 import { MOCK_LOANS } from "@/data/mock/loans";
 
 /**
- * Service to manage Loan Portfolio data.
- * Simulated async backend calls.
+ * LOAN SERVICE: Production-Ready Frontend Skeleton
+ * All methods are asynchronous and ready for API integration.
  */
+
 export async function getLoans(): Promise<Loan[]> {
-  await new Promise((resolve) => setTimeout(resolve, 700));
-  return [...MOCK_LOANS].sort((a, b) => 
-    new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
-  );
+  // TODO: Replace with backend API call (e.g., fetch('/api/loans'))
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  return [...MOCK_LOANS];
 }
 
-export async function createLoan(data: Partial<Loan>): Promise<Loan> {
-  await new Promise((resolve) => setTimeout(resolve, 1200));
-  
-  const principal = data.principal || 0;
-  const interest = principal * ((data.interestRate || 0) / 100);
-  const totalPayable = principal + interest;
+export async function getLoanById(id: string): Promise<Loan | undefined> {
+  // TODO: Replace with backend API call (e.g., fetch(`/api/loans/${id}`))
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  return MOCK_LOANS.find((l) => l.id === id);
+}
 
-  const newLoan: Loan = {
-    id: `ln_${Math.random().toString(36).substr(2, 9)}`,
-    loanNumber: `LN-2026-${Math.floor(100 + Math.random() * 900)}`,
-    customerId: data.customerId || "unknown",
-    customerName: data.customerName || "Unknown Borrower",
-    principal: principal,
-    interestRate: data.interestRate || 10,
-    term: data.term || 12,
-    frequency: data.frequency || "Monthly",
-    category: data.category || "Personal",
-    startDate: new Date().toISOString().split('T')[0],
-    totalPayable: totalPayable,
-    totalPaid: 0,
-    status: "active",
-    purpose: data.purpose,
-    nextPaymentDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-  };
-  
+export async function createLoan(data: any): Promise<Loan> {
+  // TODO: POST to backend API (NestJS/Prisma)
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  console.log("Creating loan in backend...", data);
+  const newLoan = { 
+    ...data, 
+    id: Math.random().toString(36).substr(2, 9),
+    status: "pending" 
+  } as Loan;
   return newLoan;
+}
+
+export async function updateLoan(id: string, data: any): Promise<Loan> {
+  // TODO: PATCH to backend API
+  await new Promise((resolve) => setTimeout(resolve, 800));
+  console.log(`Updating loan ${id}...`, data);
+  return { id, ...data } as Loan;
+}
+
+export async function deleteLoan(id: string): Promise<boolean> {
+  // TODO: DELETE to backend API
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  console.log(`Deleting loan ${id} from database...`);
+  return true;
 }

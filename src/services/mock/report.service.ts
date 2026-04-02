@@ -1,44 +1,55 @@
-import { Report } from "@/types/report";
+import { Report, TrialBalanceReport, BalanceSheetReport, IncomeStatementReport, IncomeAnalysisReport } from "@/types/report";
 import { MOCK_REPORTS } from "@/data/mock/reports";
+import { 
+  MOCK_TRIAL_BALANCE, 
+  MOCK_BALANCE_SHEET, 
+  MOCK_INCOME_STATEMENT, 
+  MOCK_INCOME_ANALYSIS 
+} from "@/data/mock/financial-reports";
 
 /**
- * Service to manage Financial & Operational Reports.
- * Simulated async backend calls.
+ * REPORT SERVICE: Production-ready backend skeleton.
+ * Ready for heavy-duty analytics and aggregation logic.
  */
+
 export async function getReports(): Promise<Report[]> {
-  await new Promise((resolve) => setTimeout(resolve, 300));
-  return [...MOCK_REPORTS].sort((a, b) => {
-    // Sort by name
-    return a.title.localeCompare(b.title);
-  });
+  // Metadata for report types remains frontend-local or from DB
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  return [...MOCK_REPORTS];
 }
 
-/**
- * Simulates a long-running report generation process.
- */
-export async function generateReport(id: string): Promise<Report> {
-  // Simulate 2-4 seconds generation time
-  const generationTime = Math.floor(Math.random() * 2000) + 2000;
-  await new Promise((resolve) => setTimeout(resolve, generationTime));
-  
-  const report = MOCK_REPORTS.find(r => r.id === id);
-  if (!report) throw new Error("Report not found");
-
-  const updatedReport: Report = {
-    ...report,
-    status: "ready",
-    lastGenerated: new Date().toISOString(),
-    size: `${(Math.random() * 5 + 0.1).toFixed(1)} MB`
-  };
-  
-  return updatedReport;
-}
-
-/**
- * Simulates downloading the report file.
- */
-export async function downloadReport(id: string): Promise<boolean> {
+export async function getTrialBalance(): Promise<TrialBalanceReport> {
+  // TODO: Aggregate from Ledger entries in Prisma/NestJS
   await new Promise((resolve) => setTimeout(resolve, 800));
-  console.log(`Report ${id} downloaded.`);
+  return { ...MOCK_TRIAL_BALANCE };
+}
+
+export async function getBalanceSheet(): Promise<BalanceSheetReport> {
+  // TODO: Aggregate from Ledger entries
+  await new Promise((resolve) => setTimeout(resolve, 800));
+  return { ...MOCK_BALANCE_SHEET };
+}
+
+export async function getIncomeStatement(): Promise<IncomeStatementReport> {
+  // TODO: Aggregate from Revenues/Expenses
+  await new Promise((resolve) => setTimeout(resolve, 800));
+  return { ...MOCK_INCOME_STATEMENT };
+}
+
+export async function getIncomeAnalysis(): Promise<IncomeAnalysisReport> {
+  // TODO: Aggregate from Active Loans
+  await new Promise((resolve) => setTimeout(resolve, 800));
+  return { ...MOCK_INCOME_ANALYSIS };
+}
+
+export async function generateReport(id: string): Promise<boolean> {
+  // TODO: Trigger backend background job
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  console.log(`Generating report ${id} for download...`);
   return true;
+}
+
+export async function downloadReport(id: string): Promise<void> {
+  // TODO: Trigger direct download from S3/Storage
+  console.log(`Downloading report ${id} file...`);
 }

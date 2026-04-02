@@ -2,43 +2,29 @@ import { Asset } from "@/types/asset";
 import { MOCK_ASSETS } from "@/data/mock/assets";
 
 /**
- * Service to manage Fixed Assets.
- * Simulated async backend calls.
+ * ASSET SERVICE: Production-ready backend skeleton.
  */
+
 export async function getAssets(): Promise<Asset[]> {
+  // TODO: Replace with backend API call
   await new Promise((resolve) => setTimeout(resolve, 500));
-  return [...MOCK_ASSETS].sort((a, b) => 
-    new Date(b.acqDate).getTime() - new Date(a.acqDate).getTime()
-  );
+  return [...MOCK_ASSETS];
 }
 
 export async function createAsset(data: Partial<Asset>): Promise<Asset> {
+  // TODO: POST to backend
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  
-  const acquisitionPrice = data.value || 0;
-  const newAsset: Asset = {
-    id: `ast_${Math.random().toString(36).substr(2, 9)}`,
-    assetNo: data.assetNo || `FA/${new Date().getFullYear()}/000`,
-    item: data.item || "New Asset",
-    category: data.category || "Electronics",
-    location: data.location || "Office - Kigali",
-    acqDate: data.acqDate || new Date().toISOString().split('T')[0],
-    value: acquisitionPrice,
-    accumDep: 0,
-    bookValue: acquisitionPrice + (data.additions || 0),
-    condition: data.condition || "Good",
-    status: "active",
-    
-    // New Fields
-    description: data.description,
-    serialNumber: data.serialNumber,
-    assignedUser: data.assignedUser,
-    supplier: data.supplier,
-    additions: data.additions || 0,
-    lifespan: data.lifespan || 4,
-    depreciationRate: data.depreciationRate || 25,
-    reportingDate: data.reportingDate || new Date().toISOString().split('T')[0],
-  };
-  
-  return newAsset;
+  return { ...data, id: Math.random().toString(36).substr(2, 9) } as Asset;
+}
+
+export async function updateAsset(id: string, data: Partial<Asset>): Promise<Asset> {
+  // TODO: PATCH to backend
+  await new Promise((resolve) => setTimeout(resolve, 800));
+  return { id, ...data } as Asset;
+}
+
+export async function deleteAsset(id: string): Promise<boolean> {
+  // TODO: DELETE from backend
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  return true;
 }

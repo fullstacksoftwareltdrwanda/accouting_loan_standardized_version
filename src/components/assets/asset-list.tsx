@@ -124,6 +124,17 @@ export const AssetList = () => {
                 isLoading={isLoading}
                 filterColumn="item"
                 filterPlaceholder="Filter by item..."
+                emptyStateTitle="Empty Fixed Asset Register"
+                emptyStateDescription="No assets have been registered yet. Start by adding your first asset to the company inventory."
+                emptyStateAction={
+                  <Button 
+                    onClick={() => setIsDialogOpen(true)}
+                    className="h-12 px-8 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black uppercase text-[12px] tracking-widest gap-3 shadow-xl shadow-blue-500/20"
+                  >
+                    <Plus className="h-5 w-5" />
+                    Register Your First Asset
+                  </Button>
+                }
             />
           </div>
         </div>

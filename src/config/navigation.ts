@@ -52,6 +52,8 @@ export const navigationConfig: NavSection[] = [
       { title: "Loans", href: "/loans", icon: CreditCard },
       { title: "Requested Loans", href: "/loans/requested", icon: HelpCircle },
       { title: "Rejected Loans", href: "/loans/rejected", icon: FileMinus },
+      { title: "Overdue Instalments", href: "/loans/overdue", icon: AlertCircle },
+      { title: "Payment Notifications", href: "/loans/notifications", icon: Bell },
     ],
   },
   {

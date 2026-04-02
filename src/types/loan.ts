@@ -14,8 +14,12 @@ export interface Loan {
   frequency: RepaymentFrequency;
   category: LoanCategory;
   startDate: string;
+  disbursementDate: string;
+  maturityDate: string;
   totalPayable: number;
   totalPaid: number;
+  collateralValue?: number;
+  daysOverdue?: number;
   status: StatusType;
   purpose?: string;
   lastPaymentDate?: string;

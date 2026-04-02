@@ -1,34 +1,20 @@
-import { LedgerTransaction, JournalEntry } from "@/types/ledger";
-import { MOCK_LEDGER_TRANSACTIONS, MOCK_RECENT_ENTRIES } from "@/data/mock/ledger";
+import { JournalEntry } from "@/types/ledger";
+import { MOCK_LEDGER_ENTRIES } from "@/data/mock/ledger";
 
-export async function getLedgerTransactions(): Promise<LedgerTransaction[]> {
-  await new Promise(resolve => setTimeout(resolve, 300));
-  return [...MOCK_LEDGER_TRANSACTIONS].reverse();
+/**
+ * LEDGER SERVICE: Production-ready backend skeleton.
+ * Standardizing for NestJS/Prisma double-entry sync.
+ */
+
+export async function getLedgerEntries(): Promise<JournalEntry[]> {
+  // TODO: Replace with backend API call (Sorted by date DESC)
+  await new Promise((resolve) => setTimeout(resolve, 600));
+  return [...MOCK_LEDGER_ENTRIES];
 }
 
-export async function getRecentJournalEntries(): Promise<JournalEntry[]> {
-  await new Promise(resolve => setTimeout(resolve, 300));
-  return [...MOCK_RECENT_ENTRIES];
-}
-
-export async function saveJournalEntry(entry: Partial<JournalEntry>): Promise<JournalEntry> {
-  await new Promise(resolve => setTimeout(resolve, 600));
-  
-  // Calculate total debits and credits to ensure it balances before saving
-  const totalDebits = entry.lines?.reduce((sum, line) => sum + (Number(line.debit) || 0), 0) || 0;
-  const totalCredits = entry.lines?.reduce((sum, line) => sum + (Number(line.credit) || 0), 0) || 0;
-
-  if (Math.abs(totalDebits - totalCredits) > 0.01) {
-    throw new Error("Journal entry must balance. Total Debits must equal Total Credits.");
-  }
-
-  const newEntry: JournalEntry = {
-    id: `je_${Math.random().toString(36).substr(2, 9)}`,
-    date: entry.date || new Date().toISOString().split('T')[0],
-    voucherNumber: entry.voucherNumber || `JV-${Math.floor(Math.random() * 100000)}`,
-    status: "posted",
-    lines: entry.lines || []
-  };
-
-  return newEntry;
+export async function createLedgerEntry(data: Partial<JournalEntry>): Promise<JournalEntry> {
+  // TODO: POST to backend
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  console.log("Journalizing entry...", data);
+  return { ...data, id: Math.random().toString(36).substr(2, 9) } as JournalEntry;
 }

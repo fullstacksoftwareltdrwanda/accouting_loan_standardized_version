@@ -5,6 +5,7 @@ import { List } from "lucide-react";
 import { GLAccount } from "@/types/account";
 import { DataTable } from "@/components/table/data-table";
 import { accountColumns, getAccountActions } from "./account-columns";
+import { Button } from "@/components/ui/button";
 
 interface AccountListProps {
   accounts: GLAccount[];
@@ -46,6 +47,16 @@ export function AccountList({ accounts, isLoading }: AccountListProps) {
             isLoading={isLoading} 
             filterColumn="name"
             filterPlaceholder="Search by account name or code..."
+            emptyStateTitle="Empty Chart of Accounts"
+            emptyStateDescription="No accounts have been defined yet. Start by building your financial ledger structure."
+            emptyStateAction={
+              <Button 
+                onClick={() => document.getElementById('add-account-btn')?.click()}
+                className="h-12 px-8 bg-[#5c636a] hover:bg-zinc-700 text-white rounded-2xl font-black uppercase text-[12px] tracking-widest gap-3 shadow-xl"
+              >
+                Create Your First Account
+              </Button>
+            }
           />
         </div>
       </div>
