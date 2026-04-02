@@ -12,7 +12,11 @@ export const MOCK_ASSETS: Asset[] = [
     accumDep: 604166,
     bookValue: 2295834,
     condition: "Excellent",
-    status: "active"
+    status: "active",
+    additions: 0,
+    lifespan: 3,
+    depreciationRate: 33.33,
+    reportingDate: "2026-03-31"
   },
   {
     id: "ast_2",
@@ -25,7 +29,11 @@ export const MOCK_ASSETS: Asset[] = [
     accumDep: 45000,
     bookValue: 405000,
     condition: "Good",
-    status: "active"
+    status: "active",
+    additions: 0,
+    lifespan: 10,
+    depreciationRate: 10,
+    reportingDate: "2026-03-31"
   },
   {
     id: "ast_3",
@@ -38,7 +46,11 @@ export const MOCK_ASSETS: Asset[] = [
     accumDep: 160000,
     bookValue: 3040000,
     condition: "Fair",
-    status: "active"
+    status: "active",
+    additions: 0,
+    lifespan: 5,
+    depreciationRate: 20,
+    reportingDate: "2026-03-31"
   },
   {
     id: "ast_4",
@@ -51,7 +63,11 @@ export const MOCK_ASSETS: Asset[] = [
     accumDep: 50000,
     bookValue: 1150000,
     condition: "Excellent",
-    status: "active"
+    status: "active",
+    additions: 0,
+    lifespan: 4,
+    depreciationRate: 25,
+    reportingDate: "2026-03-31"
   },
   {
     id: "ast_5",
@@ -64,7 +80,11 @@ export const MOCK_ASSETS: Asset[] = [
     accumDep: 225000,
     bookValue: 1275000,
     condition: "Good",
-    status: "active"
+    status: "active",
+    additions: 0,
+    lifespan: 10,
+    depreciationRate: 10,
+    reportingDate: "2026-03-31"
   },
   {
     id: "ast_6",
@@ -77,7 +97,11 @@ export const MOCK_ASSETS: Asset[] = [
     accumDep: 12500,
     bookValue: 237500,
     condition: "Fair",
-    status: "active"
+    status: "active",
+    additions: 0,
+    lifespan: 5,
+    depreciationRate: 20,
+    reportingDate: "2026-03-31"
   },
   {
     id: "ast_7",
@@ -90,6 +114,10 @@ export const MOCK_ASSETS: Asset[] = [
     accumDep: 85000,
     bookValue: 765000,
     condition: "Needs Repair",
-    status: "active"
+    status: "active",
+    additions: 0,
+    lifespan: 7,
+    depreciationRate: 14.28,
+    reportingDate: "2026-03-31"
   }
 ];

@@ -1,4 +1,16 @@
 export type ReportStatus = "draft" | "ready" | "processing";
+export type ReportCategory = "Financial" | "Operational" | "Compliance";
+
+export interface Report {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  status: ReportStatus;
+  format: string;
+  lastGenerated?: string;
+  size?: string;
+}
 
 export interface TrialBalanceItem {
   accountCode: string;
