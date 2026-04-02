@@ -5,7 +5,9 @@ export type AccountCategory =
   | "Liability" 
   | "Equity" 
   | "Revenue" 
-  | "Expense";
+  | "Expense"
+  | "Balance Sheet"
+  | "Income Statement";
 
 export type NormalBalance = "Debit" | "Credit";
 
@@ -13,7 +15,9 @@ export interface GLAccount {
   id: string;
   code: string;
   name: string;
-  category: AccountCategory;
+  category: AccountCategory; // Maps to 'Class' in the UI
+  accountType: string;       // Secondary classification (e.g. 'Cash', 'Bank Account')
+  subType: string;           // Tertiary classification (e.g. 'Current Asset')
   normalBalance: NormalBalance;
   description?: string;
   balance: number;

@@ -42,59 +42,59 @@ export const accountColumns = (
   {
     accessorKey: "code",
     header: "Code",
-    cell: ({ row }) => <span className="font-mono font-bold text-indigo-600">{row.getValue("code")}</span>,
+    cell: ({ row }) => <span className="font-semibold text-rose-500">{row.getValue("code")}</span>,
   },
   {
     accessorKey: "name",
     header: "Account Name",
     cell: ({ row }) => (
       <div className="flex flex-col">
-        <span className="font-bold text-zinc-900 dark:text-zinc-50">{row.getValue("name")}</span>
-        {row.original.description && (
-          <span className="text-xs text-zinc-500 italic max-w-[200px] truncate">{row.original.description}</span>
-        )}
+        <span className="font-semibold text-zinc-700">{row.getValue("name")}</span>
+        <span className="text-[11px] text-zinc-400 font-medium">{row.original.subType}</span>
       </div>
     ),
   },
   {
     accessorKey: "category",
-    header: "Category",
+    header: "Type",
     cell: ({ row }) => {
       const category = row.getValue("category") as AccountCategory;
       const colors: Record<AccountCategory, string> = {
-        Asset: "text-blue-600 bg-blue-50 dark:bg-blue-900/10",
-        Liability: "text-amber-600 bg-amber-50 dark:bg-amber-900/10",
-        Equity: "text-emerald-600 bg-emerald-50 dark:bg-emerald-900/10",
-        Revenue: "text-violet-600 bg-violet-50 dark:bg-violet-900/10",
-        Expense: "text-rose-600 bg-rose-50 dark:bg-rose-900/10",
+        Asset: "bg-blue-600 text-white",
+        Liability: "bg-amber-500 text-white",
+        Equity: "bg-emerald-500 text-white",
+        Revenue: "bg-indigo-500 text-white",
+        Expense: "bg-rose-500 text-white",
+        "Balance Sheet": "bg-slate-500 text-white",
+        "Income Statement": "bg-teal-500 text-white",
       };
       return (
-        <span className={`px-2 py-1 rounded-md text-[10px] font-black uppercase tracking-wider ${colors[category]}`}>
+        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${colors[category]}`}>
           {category}
         </span>
       );
     },
   },
   {
-    accessorKey: "balance",
-    header: () => <div className="text-right">Balance</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("balance"));
-      const isNegative = amount < 0;
-      return (
-        <div className={`text-right font-mono font-black ${isNegative ? "text-rose-600" : "text-zinc-900 dark:text-zinc-50"}`}>
-          {formatCurrency(amount)}
-        </div>
-      );
-    },
+    accessorKey: "normalBalance",
+    header: "Balance",
+    cell: ({ row }) => <span className="font-semibold text-zinc-700">{row.getValue("normalBalance")}</span>,
   },
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => <StatusBadge status={row.getValue("status")} />,
+    cell: ({ row }) => {
+        const status = row.getValue("status") as string;
+        return (
+            <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${status === 'active' ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'}`}>
+                {status === 'active' ? 'Active' : 'Inactive'}
+            </span>
+        );
+    }
   },
   {
     id: "actions",
+    header: "Actions",
     cell: ({ row }) => <RowActions row={row} actions={actions} />,
   },
 ];

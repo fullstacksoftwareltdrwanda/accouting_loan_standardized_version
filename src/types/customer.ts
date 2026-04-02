@@ -1,21 +1,40 @@
-import { StatusType } from "./common";
-
-export interface CustomerFinancials {
-  totalLoans: number;
-  activeBalance: number;
-  totalPaid: number;
-  onTimeRepaymentRate: number;
-}
+export type CustomerStatus = "APPROVED" | "PENDING" | "REJECTED";
 
 export interface Customer {
   id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
+  memberNumber: string;
+  code: string;
+  name: string;
   phone: string;
-  nin: string; // National ID / Passport
-  status: StatusType;
-  address?: string;
-  joinedDate: string;
-  financials: CustomerFinancials;
+  email: string;
+  idNumber: string;
+  status: CustomerStatus;
+  
+  // Basic Info
+  gender: string;
+  dateOfBirth: string;
+  recordDate: string;
+  occupation: string;
+  accountNumber: string;
+  
+  // Residence
+  province: string;
+  district: string;
+  sector: string;
+  cell: string;
+  streetAddress: string;
+  
+  // Family
+  fatherName: string;
+  motherName: string;
+  maritalStatus: string;
+  
+  // Guarantor
+  hasGuarantor: boolean;
+  
+  // Loan Interest
+  loanTypePreferred?: string;
+  project?: string;
+  projectLocation?: string;
+  collateralLocation?: string;
 }

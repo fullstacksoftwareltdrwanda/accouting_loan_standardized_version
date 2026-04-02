@@ -23,9 +23,11 @@ export async function createAccount(data: Partial<GLAccount>): Promise<GLAccount
     code: data.code || "0000",
     name: data.name || "Unnamed Account",
     category: data.category || "Asset",
+    accountType: data.accountType || "Other",
+    subType: data.subType || "Other",
     normalBalance: data.normalBalance || "Debit",
     balance: data.balance || 0,
-    status: "active",
+    status: data.status || "active",
     lastModified: new Date().toISOString().split('T')[0],
     description: data.description,
   };

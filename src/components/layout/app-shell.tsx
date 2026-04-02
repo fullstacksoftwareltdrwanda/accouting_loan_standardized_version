@@ -20,8 +20,8 @@ export const AppShell = ({ children }: AppShellProps) => {
       <div className="flex flex-1 flex-col min-w-0">
         <AppHeader />
         
-        <main className="flex-1 p-4 md:p-6 animate-in fade-in duration-500">
-          <div className="mx-auto max-w-[1440px]">
+        <main className="flex-1 p-4 md:p-6 animate-in fade-in duration-500 overflow-x-hidden">
+          <div className="mx-auto max-w-[1440px] px-2 md:px-8">
             {children}
           </div>
         </main>

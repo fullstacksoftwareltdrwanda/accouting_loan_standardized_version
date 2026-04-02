@@ -40,20 +40,25 @@ export const navigationConfig: NavSection[] = [
     ],
   },
   {
-    title: "Borrowers & Loans",
+    title: "Business Reports",
     items: [
-      { title: "Customers & KYC", href: "/customers", icon: Users },
-      { title: "Loan Portfolio", href: "/loans", icon: CreditCard },
-      { title: "Pending Applications", href: "/loans/requested", icon: HelpCircle },
-      { title: "Overdue Collections", href: "/loans/overdue", icon: AlertCircle },
-      { title: "Rejected History", href: "/loans/rejected", icon: FileMinus },
+      { title: "Financial Reports", href: "/reports/financial", icon: BarChart },
+    ],
+  },
+  {
+    title: "Loan Management",
+    items: [
+      { title: "Customers", href: "/customers", icon: Users },
+      { title: "Loans", href: "/loans", icon: CreditCard },
+      { title: "Requested Loans", href: "/loans/requested", icon: HelpCircle },
+      { title: "Rejected Loans", href: "/loans/rejected", icon: FileMinus },
     ],
   },
   {
     title: "Operations & Analytics",
     items: [
       { title: "Approval Center", href: "/approvals", icon: CheckCircle },
-      { title: "Reports & Export", href: "/reports", icon: BarChart },
+      { title: "General Reports", href: "/reports", icon: Download },
     ],
   },
 ];
