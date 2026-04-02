@@ -42,11 +42,12 @@ export async function getIncomeAnalysis(): Promise<IncomeAnalysisReport> {
   return { ...MOCK_INCOME_ANALYSIS };
 }
 
-export async function generateReport(id: string): Promise<boolean> {
+export async function generateReport(id: string): Promise<Report> {
   // TODO: Trigger backend background job
   await new Promise((resolve) => setTimeout(resolve, 2000));
   console.log(`Generating report ${id} for download...`);
-  return true;
+  const report = MOCK_REPORTS.find(r => r.id === id) || MOCK_REPORTS[0];
+  return { ...report, lastGenerated: new Date().toISOString(), status: "ready" };
 }
 
 export async function downloadReport(id: string): Promise<void> {
