@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Clock } from "lucide-react";
 import { Loan } from "@/types/loan";
-import { getLoans } from "@/services/mock/loan.service";
+import { getLoans } from "@/services/loan.service";
 import { DataTable } from "@/components/table/data-table";
 import { requestedLoanColumns, getRequestedLoanActions } from "./loan-columns";
 

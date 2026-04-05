@@ -1,11 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
-import { Plus, Save, RotateCcw, FileText, Trash2, ShieldAlert } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Plus, Save, RotateCcw, FileText, Trash2, ShieldAlert, Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MOCK_ACCOUNTS } from "@/data/mock/accounts";
+import { cn } from "@/lib/utils";
+import { getAccounts } from "@/services/account.service";
+import { postManualJournal } from "@/services/ledger.service";
+import { GLAccount } from "@/types/account";
+import { useRouter } from "next/navigation";
 
 interface JournalEntryRow {
   id: string;
@@ -16,13 +20,21 @@ interface JournalEntryRow {
 }
 
 export function ManualJournalEntry() {
-  const [date, setDate] = useState("2026-04-01");
-  const [voucher, setVoucher] = useState("JV-20260401-001");
+  const router = useRouter();
+  const [accounts, setAccounts] = useState<GLAccount[]>([]);
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+  const [voucher, setVoucher] = useState(`JV-${new Date().toISOString().slice(0, 10).replace(/-/g, "")}-${Math.floor(Math.random() * 1000)}`);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState<{ type: "success" | "error", text: string } | null>(null);
   
   const [rows, setRows] = useState<JournalEntryRow[]>([
     { id: "row-1", accountId: "", narration: "", debit: 0, credit: 0 },
     { id: "row-2", accountId: "", narration: "", debit: 0, credit: 0 },
   ]);
+
+  useEffect(() => {
+    getAccounts().then(setAccounts).catch(console.error);
+  }, []);
 
   const addRow = () => {
     setRows([
@@ -47,12 +59,49 @@ export function ManualJournalEntry() {
   const isBalanced = difference === 0 && totalDebits > 0;
 
   const handleReset = () => {
-    setDate("2026-04-01");
-    setVoucher("JV-20260401-001");
+    setDate(new Date().toISOString().split("T")[0]);
+    setVoucher(`JV-${new Date().toISOString().slice(0, 10).replace(/-/g, "")}-${Math.floor(Math.random() * 1000)}`);
     setRows([
       { id: "row-1", accountId: "", narration: "", debit: 0, credit: 0 },
       { id: "row-2", accountId: "", narration: "", debit: 0, credit: 0 },
     ]);
+    setMessage(null);
+  };
+
+  const handleSubmit = async () => {
+    if (!isBalanced) return;
+    setIsSubmitting(true);
+    setMessage(null);
+
+    try {
+      const payload = {
+        date,
+        description: rows[0].narration || "Manual Journal Entry",
+        reference: voucher,
+        lines: rows.map(r => {
+          const acc = accounts.find(a => a.id === r.accountId);
+          return {
+            accountCode: acc?.code || "",
+            particular: r.narration,
+            narration: r.narration,
+            debitAmount: r.debit,
+            creditAmount: r.credit
+          };
+        })
+      };
+
+      await postManualJournal(payload);
+      setMessage({ type: "success", text: "Journal entry posted successfully!" });
+      setTimeout(() => {
+        handleReset();
+        router.push("/accounting/general-ledger");
+      }, 2000);
+    } catch (err: any) {
+      console.error(err);
+      setMessage({ type: "error", text: err.message || "Failed to post journal entry." });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -80,13 +129,23 @@ export function ManualJournalEntry() {
           </div>
         </div>
 
+        {message && (
+          <div className={cn(
+            "mx-4 p-3 rounded-lg flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider animate-in fade-in slide-in-from-top-2",
+            message.type === "success" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-rose-50 text-rose-600 border border-rose-100"
+          )}>
+            {message.type === "success" ? <CheckCircle className="h-4 w-4" /> : <ShieldAlert className="h-4 w-4" />}
+            {message.text}
+          </div>
+        )}
+
         {/* Entries list */}
         <div className="space-y-4">
           <h4 className="text-[12px] font-semibold text-zinc-600">Journal Entries</h4>
 
           <div className="space-y-4">
             {rows.map((row, index) => {
-              const account = MOCK_ACCOUNTS.find((a) => a.id === row.accountId);
+              const account = accounts.find((a) => a.id === row.accountId);
 
               return (
                 <div key={row.id} className="relative p-3 border rounded-lg border-zinc-100 bg-zinc-50/30">
@@ -112,7 +171,7 @@ export function ManualJournalEntry() {
                           <SelectValue placeholder="Select Account" />
                         </SelectTrigger>
                         <SelectContent>
-                          {MOCK_ACCOUNTS.map((acc) => (
+                          {accounts.map((acc) => (
                             <SelectItem key={acc.id} value={acc.id}>
                               {acc.code} - {acc.name}
                             </SelectItem>
@@ -218,11 +277,12 @@ export function ManualJournalEntry() {
 
       <div className="px-4 py-3 bg-zinc-50/50 border-t border-zinc-100 flex items-center justify-center gap-2">
         <Button 
-          disabled={!isBalanced} 
+          disabled={!isBalanced || isSubmitting} 
+          onClick={handleSubmit}
           className="h-8 flex-1 bg-blue-600 hover:bg-blue-700 font-semibold shadow-sm disabled:opacity-40 text-[12px]"
         >
-          <Save className="w-3.5 h-3.5 mr-1.5" />
-          Save Journal Entry
+          {isSubmitting ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <Save className="w-3.5 h-3.5 mr-1.5" />}
+          {isSubmitting ? "Posting..." : "Save Journal Entry"}
         </Button>
         <Button 
           variant="outline" 
@@ -233,6 +293,7 @@ export function ManualJournalEntry() {
           Reset Form
         </Button>
       </div>
+
     </div>
   );
 }

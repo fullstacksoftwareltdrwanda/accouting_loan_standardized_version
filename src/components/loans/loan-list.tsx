@@ -7,7 +7,7 @@ import {
   Filter, 
 } from "lucide-react";
 import { Loan } from "@/types/loan";
-import { getLoans } from "@/services/mock/loan.service";
+import { getLoans } from "@/services/loan.service";
 import { DataTable } from "@/components/table/data-table";
 import { loanColumns, getLoanActions } from "./loan-columns";
 import { LoanStats } from "./loan-stats";

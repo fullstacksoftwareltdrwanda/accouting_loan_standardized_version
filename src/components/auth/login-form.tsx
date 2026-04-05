@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { loginAction } from "@/lib/auth-actions";
 import { cn } from "@/lib/utils";
+import { setTokens } from "@/lib/api-client";
 
 const loginSchema = z.object({
   identifier: z.string().min(3, "Username or email must be at least 3 characters"),
@@ -50,7 +51,10 @@ export const LoginForm = () => {
         password: data.password,
       });
 
-      if (result.success) {
+      if (result.success && result.user) {
+        // Store tokens for client-side API calls
+        setTokens(result.user.accessToken, result.user.refreshToken);
+        
         // Success: Redirect to dashboard
         router.push("/dashboard");
       } else {

@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { GLAccount } from "@/types/account";
 import { Expense } from "@/types/expense";
+import { toast } from "sonner";
 
 interface ExpenseRecordFormProps {
   accounts: GLAccount[];
@@ -31,29 +32,51 @@ export const ExpenseRecordForm = ({ accounts, onSubmit, isLoading }: ExpenseReco
     description: "",
   });
 
-  const expenseAccounts = accounts.filter(acc => acc.category === "Expense" || acc.category === "Income Statement");
-  const paymentAccounts = accounts.filter(acc => acc.accountType === "Cash" || acc.accountType === "Bank");
+  const expenseAccounts = accounts.filter(acc => 
+    acc.accountType?.toLowerCase().includes("expense") || 
+    acc.category?.toLowerCase().includes("expense") ||
+    acc.subType?.toLowerCase().includes("expense")
+  );
+  const paymentAccounts = accounts.filter(acc => 
+    !acc.accountType?.toLowerCase().includes("expense") && 
+    !acc.category?.toLowerCase().includes("expense") &&
+    !acc.subType?.toLowerCase().includes("expense")
+  );
 
   const selectedExpenseAccount = accounts.find(a => a.code === formData.expenseAccount);
   const selectedPaymentAccount = accounts.find(a => a.code === formData.paymentAccount);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onSubmit({
-      accountCode: formData.expenseAccount,
-      date: formData.date,
-      amount: parseFloat(formData.amount),
-      description: formData.description,
-      category: selectedExpenseAccount?.category as any || "Administrative",
-    });
-    // Reset form
-    setFormData({
-      expenseAccount: "",
-      paymentAccount: "",
-      date: new Date().toISOString().split('T')[0],
-      amount: "0",
-      description: "",
-    });
+    if (!formData.expenseAccount || !formData.paymentAccount || !formData.amount || !formData.description) {
+        toast.error("Please fill in all required fields");
+        return;
+    }
+    
+    try {
+      await onSubmit({
+        accountCode: formData.expenseAccount,
+        paymentAccountCode: formData.paymentAccount,
+        date: formData.date,
+        amount: parseFloat(formData.amount),
+        description: formData.description,
+        category: (selectedExpenseAccount?.category as any) || "General",
+      });
+
+      toast.success("Expense recorded and ledger entries posted successfully");
+      
+      // Reset form
+      setFormData({
+        expenseAccount: "",
+        paymentAccount: "",
+        date: new Date().toISOString().split('T')[0],
+        amount: "0",
+        description: "",
+      });
+    } catch (error: any) {
+      console.error("Failed to save expense", error);
+      toast.error(error.message || "Failed to save expense");
+    }
   };
 
   return (

@@ -9,7 +9,7 @@ import {
   CalendarDays
 } from "lucide-react";
 import { Loan } from "@/types/loan";
-import { getLoans } from "@/services/mock/loan.service";
+import { getLoans } from "@/services/loan.service";
 import { DashboardBanner } from "@/components/shared/dashboard-banner";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Bell, Info, AlertTriangle, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Notification, NotificationType } from "@/types/notification";
-import { getNotifications, markAsRead } from "@/services/mock/notification.service";
+import { getNotifications, markAsRead } from "@/services/notification.service";
 import {
   Popover,
   PopoverContent,
@@ -15,13 +15,15 @@ import Link from "next/link";
 
 export function NotificationsDropdown() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
       try {
         const data = await getNotifications();
-        setNotifications(data);
+        setNotifications(data.notifications);
+        setUnreadCount(data.unreadCount);
       } catch (error) {
         console.error("Failed to load notifications", error);
       } finally {
@@ -31,14 +33,13 @@ export function NotificationsDropdown() {
     load();
   }, []);
 
-  const unreadCount = notifications.filter((n) => !n.isRead).length;
-
   const handleMarkRead = async (id: string) => {
     try {
       await markAsRead(id);
       setNotifications((prev) =>
         prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
       );
+      setUnreadCount(prev => Math.max(0, prev - 1));
     } catch (error) {
       console.error("Failed to mark read", error);
     }

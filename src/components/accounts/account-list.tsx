@@ -1,20 +1,23 @@
-"use client";
-
-import React from "react";
+import React, { useState } from "react";
 import { GLAccount } from "@/types/account";
 import { DataTable } from "@/components/table/data-table";
 import { accountColumns, getAccountActions } from "./account-columns";
 import { Button } from "@/components/ui/button";
+import { DeactivateAccountDialog } from "./deactivate-account-dialog";
 
 interface AccountListProps {
   accounts: GLAccount[];
   isLoading: boolean;
+  onAccountDeactivated?: (accountId: string) => void;
 }
 
-export function AccountList({ accounts, isLoading }: AccountListProps) {
+export function AccountList({ accounts, isLoading, onAccountDeactivated }: AccountListProps) {
+  const [deactivatingAccount, setDeactivatingAccount] = useState<GLAccount | null>(null);
+
   const actions = getAccountActions(
     (acc) => console.log("Edit", acc),
-    (acc) => console.log("View Ledger", acc)
+    (acc) => console.log("View Ledger", acc),
+    (acc) => setDeactivatingAccount(acc)
   );
 
   const columns = accountColumns(actions);
@@ -43,6 +46,18 @@ export function AccountList({ accounts, isLoading }: AccountListProps) {
             Create First Account
           </Button>
         }
+      />
+
+      <DeactivateAccountDialog 
+        account={deactivatingAccount}
+        isOpen={!!deactivatingAccount}
+        onClose={() => setDeactivatingAccount(null)}
+        onSuccess={() => {
+            if (deactivatingAccount && onAccountDeactivated) {
+                onAccountDeactivated(deactivatingAccount.id);
+            }
+            setDeactivatingAccount(null);
+        }}
       />
     </div>
   );

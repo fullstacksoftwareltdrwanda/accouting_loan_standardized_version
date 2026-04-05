@@ -1,0 +1,14 @@
+import { NextRequest } from "next/server";
+import prisma from "@/lib/prisma";
+import { withAuth, AuthedRequest } from "@/lib/auth-middleware";
+import { successResponse } from "@/lib/api-response";
+
+// PATCH /api/notifications/read-all
+export const PATCH = withAuth(async (req: AuthedRequest) => {
+  const userId = parseInt(req.user.sub);
+  const { count } = await prisma.notification.updateMany({
+    where: { userId, read: false },
+    data:  { read: true },
+  });
+  return successResponse({ marked: count });
+}) as unknown as (req: NextRequest) => Promise<Response>;

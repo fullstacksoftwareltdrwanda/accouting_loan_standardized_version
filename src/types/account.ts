@@ -21,6 +21,7 @@ export interface GLAccount {
   normalBalance: NormalBalance;
   description?: string;
   balance: number;
+  isActive: boolean;
   status: StatusType;
   lastModified: string;
 }

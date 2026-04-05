@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { AlertCircle, Search, ShieldCheck } from "lucide-react";
 import { Loan } from "@/types/loan";
-import { getLoans } from "@/services/mock/loan.service";
+import { getLoans } from "@/services/loan.service";
+import { getCustomers } from "@/services/customer.service";
 import { DataTable } from "@/components/table/data-table";
 import { overdueLoanColumns, getLoanActions } from "./loan-columns";
 import { DashboardBanner } from "@/components/shared/dashboard-banner";

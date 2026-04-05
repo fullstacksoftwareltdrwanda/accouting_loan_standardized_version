@@ -25,8 +25,8 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Customer } from "@/types/customer";
-import { getCustomers } from "@/services/mock/customer.service";
-import { createLoan } from "@/services/mock/loan.service";
+import { getCustomers } from "@/services/customer.service";
+import { createLoan } from "@/services/loan.service";
 import { useRouter } from "next/navigation";
 
 const loanFormSchema = z.object({
@@ -34,15 +34,19 @@ const loanFormSchema = z.object({
   loanNumber: z.string().min(1, "Loan number is required"),
   isTopUp: z.boolean(),
   principal: z.number().min(1000, "Min amount is 1,000"),
-  cashAmount: z.number(),
-  bankAmount: z.number(),
+  cashAmount: z.number().optional(),
+  bankAmount: z.number().optional(),
   deductFeeUpfront: z.boolean(),
   interestRate: z.number().min(0),
   mgmtFeeRate: z.number().min(0),
   instalments: z.number().min(1),
   disbursementDate: z.string().min(1, "Disbursement date is required"),
+  disbursementMethod: z.string().min(1, "Required"),
+  bankName: z.string().optional(),
+  accountNumber: z.string().optional(),
+  purpose: z.string().optional(),
   collateralType: z.string().optional(),
-  collateralValue: z.number(),
+  collateralValue: z.number().min(0),
   collateralDescription: z.string().optional(),
 });
 
@@ -58,6 +62,7 @@ export function LoanForm({
   const router = useRouter();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const { register, handleSubmit, control, setValue, watch, formState: { errors } } = useForm<LoanFormValues>({
     resolver: zodResolver(loanFormSchema),
@@ -71,6 +76,10 @@ export function LoanForm({
       instalments: Number(initialData?.instalments || 6),
       disbursementDate: initialData?.disbursementDate || new Date().toISOString().split("T")[0],
       deductFeeUpfront: initialData?.deductFeeUpfront ?? true,
+      disbursementMethod: initialData?.disbursementMethod || "BankTransfer" as any,
+      bankName: initialData?.bankName || "",
+      accountNumber: initialData?.accountNumber || "",
+      purpose: initialData?.purpose || "General Business",
       cashAmount: Number(initialData?.cashAmount || 0),
       bankAmount: Number(initialData?.bankAmount || 0),
       collateralValue: Number(initialData?.collateralValue || 0),
@@ -91,7 +100,7 @@ export function LoanForm({
 
   // Fetch customers
   useEffect(() => {
-    getCustomers().then(setCustomers);
+    getCustomers().then(data => setCustomers(data.customers as Customer[]));
   }, []);
 
   // Real-time calculations
@@ -128,19 +137,34 @@ export function LoanForm({
 
   const onSubmit = async (data: LoanFormValues) => {
     setIsSubmitting(true);
+    setError(null);
     try {
-      const customer = customers.find(c => c.id === data.customerId);
-      await createLoan({
-        ...data,
-        customerName: customer?.name || "Unknown",
-        totalPayable: summary.totalToPay,
-        totalPaid: 0,
-        status: "active",
-        maturityDate: summary.maturityDate,
-      });
+      const payload = {
+        customerId: parseInt(data.customerId),
+        loanNumber: data.loanNumber,
+        loanAmount: data.principal,
+        interestRate: data.interestRate,
+        numberOfInstalments: data.instalments,
+        managementFeeRate: data.mgmtFeeRate,
+        deductFeeUpfront: data.deductFeeUpfront,
+        disbursementDate: new Date(data.disbursementDate).toISOString(),
+        firstPaymentDate: new Date(data.disbursementDate).toISOString(), // Simplified for now
+        maturityDate: new Date(summary.maturityDate).toISOString(),
+        purpose: data.purpose || "General Business",
+        disbursementMethod: data.disbursementMethod || "BankTransfer",
+        bankName: data.bankName,
+        accountNumber: data.accountNumber,
+        collateralType: data.collateralType,
+        collateralValue: data.collateralValue,
+        collateralDescription: data.collateralDescription,
+        isTopup: data.isTopUp
+      };
+
+      await createLoan(payload);
       router.push("/loans");
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      setError(err.message || "Failed to create loan. Please check your data.");
     } finally {
       setIsSubmitting(false);
     }
@@ -201,9 +225,15 @@ export function LoanForm({
 
           <div className="p-4 rounded-2xl bg-cyan-50 border border-cyan-100 flex gap-3 dark:bg-cyan-900/10 dark:border-cyan-900/20">
              <AlertCircle className="h-5 w-5 text-cyan-500 shrink-0" />
-             <p className="text-[11px] text-cyan-700 font-medium leading-relaxed">
-               <span className="font-black text-cyan-800">Total Disbursed:</span> This is the starting balance for all payment calculations. Choose whether to deduct management fee upfront or include it in first installment.
-             </p>
+             <div className="space-y-1">
+                <p className="text-[11px] text-cyan-700 font-medium leading-relaxed">
+                  <span className="font-black text-cyan-800">Total Disbursed:</span> This is the starting balance for all payment calculations. Choose whether to deduct management fee upfront or include it in first installment.
+                </p>
+                <div className="pt-2">
+                   <Label className="text-[10px] font-black uppercase text-cyan-800">Loan Purpose</Label>
+                   <Input {...register("purpose")} className="h-8 text-[11px] bg-white/50 border-cyan-200 mt-1" placeholder="e.g. Business Expansion" />
+                </div>
+             </div>
           </div>
 
           {/* Financials Grid */}
@@ -229,15 +259,27 @@ export function LoanForm({
             </div>
 
             <div className="space-y-2">
-              <Label className="text-[11px] font-black uppercase text-zinc-400">Cash Amount <span className="text-red-500">*</span></Label>
-              <Input type="number" {...register("cashAmount", { valueAsNumber: true })} className="h-12 rounded-xl" />
-              <p className="text-[10px] text-zinc-400 font-medium italic">Amount disbursed via Cash</p>
+              <Label className="text-[11px] font-black uppercase text-zinc-400">Disbursement Method <span className="text-red-500">*</span></Label>
+              <Select onValueChange={(v) => setValue("disbursementMethod", v as any)}>
+                <SelectTrigger className="h-12 rounded-xl">
+                  <SelectValue placeholder="Select Method" />
+                </SelectTrigger>
+                <SelectContent>
+                   <SelectItem value="BankTransfer">Bank Transfer</SelectItem>
+                   <SelectItem value="Cash">Cash</SelectItem>
+                   <SelectItem value="Cheque">Cheque</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">
-              <Label className="text-[11px] font-black uppercase text-zinc-400">Bank Amount <span className="text-red-500">*</span></Label>
-              <Input type="number" {...register("bankAmount", { valueAsNumber: true })} className="h-12 rounded-xl" />
-              <p className="text-[10px] text-zinc-400 font-medium italic">Amount disbursed via Bank</p>
+              <Label className="text-[11px] font-black uppercase text-zinc-400">Bank Name (If Bank/Cheque)</Label>
+              <Input {...register("bankName")} className="h-12 rounded-xl" />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-[11px] font-black uppercase text-zinc-400">Account Number (If Bank)</Label>
+              <Input {...register("accountNumber")} className="h-12 rounded-xl" />
             </div>
           </div>
 

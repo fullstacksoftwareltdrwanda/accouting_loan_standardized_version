@@ -31,25 +31,30 @@ interface AssetRegisterDialogProps {
 export const AssetRegisterDialog = ({ isOpen, onClose, onSubmit }: AssetRegisterDialogProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    item: "",
-    category: "",
+    itemName: "",
+    category: "Electronics",
     description: "",
     serialNumber: "",
-    location: "",
+    location: "Main Office - Kigali",
     assignedUser: "",
     supplier: "",
-    acqDate: "",
-    value: "0",
+    acquisitionDate: "",
+    acquisitionValue: "0",
     additions: "0",
     condition: "Good",
-    lifespan: "4",
+    lifespanYears: "4",
     depreciationRate: "25",
+    assetType: "Fixed",
+    depreciationMethod: "StraightLine",
+    usefulLifeMonths: "48",
     reportingDate: new Date().toISOString().split('T')[0],
   });
 
-  const categories = ["Electronics", "Furniture", "Vehicles", "Machinery", "Buildings", "Equipment"];
+  const categories = ["Electronics", "Furniture", "Vehicles", "Machinery", "Buildings", "Equipment", "Intangibles"];
   const locations = ["Main Office - Kigali", "Kigali Hub", "Logistics Center", "Warehouse A", "HQ - Boardroom"];
   const conditions = ["Excellent", "Good", "Fair", "Poor", "Needs Repair"];
+  const assetTypes = ["Fixed", "Current", "Intangible", "Investment"];
+  const depreciationMethods = ["StraightLine", "ReducingBalance", "DoubleDeclining", "None"];
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -59,15 +64,18 @@ export const AssetRegisterDialog = ({ isOpen, onClose, onSubmit }: AssetRegister
     e.preventDefault();
     setIsLoading(true);
     try {
-      await onSubmit({
+      const payload = {
         ...formData,
-        value: parseFloat(formData.value) || 0,
+        acquisitionValue: parseFloat(formData.acquisitionValue) || 0,
         additions: parseFloat(formData.additions) || 0,
-        lifespan: parseFloat(formData.lifespan) || 4,
+        lifespanYears: parseInt(formData.lifespanYears) || 4,
         depreciationRate: parseFloat(formData.depreciationRate) || 25,
-        condition: formData.condition as any,
-        status: "active",
-      });
+        usefulLifeMonths: parseInt(formData.usefulLifeMonths) || 48,
+        acquisitionDate: formData.acquisitionDate,
+        reportingDate: formData.reportingDate,
+      };
+
+      await onSubmit(payload as any);
       onClose();
     } catch (error) {
       console.error("Failed to save asset", error);
@@ -89,14 +97,15 @@ export const AssetRegisterDialog = ({ isOpen, onClose, onSubmit }: AssetRegister
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="flex flex-col h-full max-h-[85vh]">
+          <div className="flex-1 overflow-y-auto p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Row 1 */}
             <div className="space-y-1.5">
               <Label className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Item Name <span className="text-red-500">*</span></Label>
               <Input 
-                value={formData.item}
-                onChange={(e) => handleInputChange("item", e.target.value)}
+                value={formData.itemName}
+                onChange={(e) => handleInputChange("itemName", e.target.value)}
                 placeholder="Enter item name..."
                 required
                 className="h-10 border-zinc-200"
@@ -172,8 +181,8 @@ export const AssetRegisterDialog = ({ isOpen, onClose, onSubmit }: AssetRegister
               <Label className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Acquisition Date <span className="text-red-500">*</span></Label>
               <Input 
                 type="date"
-                value={formData.acqDate}
-                onChange={(e) => handleInputChange("acqDate", e.target.value)}
+                value={formData.acquisitionDate}
+                onChange={(e) => handleInputChange("acquisitionDate", e.target.value)}
                 required
                 className="h-10 border-zinc-200"
               />
@@ -182,8 +191,8 @@ export const AssetRegisterDialog = ({ isOpen, onClose, onSubmit }: AssetRegister
               <Label className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Acquisition Value <span className="text-red-500">*</span></Label>
               <Input 
                 type="number"
-                value={formData.value}
-                onChange={(e) => handleInputChange("value", e.target.value)}
+                value={formData.acquisitionValue}
+                onChange={(e) => handleInputChange("acquisitionValue", e.target.value)}
                 required
                 className="h-10 border-zinc-200 font-bold"
               />
@@ -201,7 +210,7 @@ export const AssetRegisterDialog = ({ isOpen, onClose, onSubmit }: AssetRegister
             </div>
             <div className="space-y-1.5">
               <Label className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Condition <span className="text-red-500">*</span></Label>
-              <Select defaultValue="Good" onValueChange={(val) => handleInputChange("condition", val)}>
+              <Select value={formData.condition} onValueChange={(val) => handleInputChange("condition", val)}>
                 <SelectTrigger className="h-10 border-zinc-200">
                   <SelectValue placeholder="Good" />
                 </SelectTrigger>
@@ -211,19 +220,52 @@ export const AssetRegisterDialog = ({ isOpen, onClose, onSubmit }: AssetRegister
               </Select>
             </div>
 
-            {/* Row 7 */}
-            <div className="grid grid-cols-3 md:col-span-2 gap-4">
+            {/* Row 7 - New Metadata */}
+            <div className="space-y-1.5">
+              <Label className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Asset Type <span className="text-red-500">*</span></Label>
+              <Select value={formData.assetType} onValueChange={(val) => handleInputChange("assetType", val)}>
+                <SelectTrigger className="h-10 border-zinc-200">
+                  <SelectValue placeholder="Fixed" />
+                </SelectTrigger>
+                <SelectContent position="popper" sideOffset={4}>
+                  {assetTypes.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Depreciation Method <span className="text-red-500">*</span></Label>
+              <Select value={formData.depreciationMethod} onValueChange={(val) => handleInputChange("depreciationMethod", val)}>
+                <SelectTrigger className="h-10 border-zinc-200">
+                  <SelectValue placeholder="StraightLine" />
+                </SelectTrigger>
+                <SelectContent position="popper" sideOffset={4}>
+                  {depreciationMethods.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Row 8 */}
+            <div className="grid grid-cols-4 md:col-span-2 gap-4">
                <div className="space-y-1.5">
-                    <Label className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Lifespan (Years) <span className="text-red-500">*</span></Label>
+                    <Label className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Lifespan (Yrs) <span className="text-red-500">*</span></Label>
                     <Input 
                         type="number"
-                        value={formData.lifespan}
-                        onChange={(e) => handleInputChange("lifespan", e.target.value)}
+                        value={formData.lifespanYears}
+                        onChange={(e) => handleInputChange("lifespanYears", e.target.value)}
                         className="h-10 border-zinc-200"
                     />
                 </div>
                 <div className="space-y-1.5">
-                    <Label className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Depreciation Rate (%) <span className="text-red-500">*</span></Label>
+                    <Label className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Useful Life (Mos)</Label>
+                    <Input 
+                        type="number"
+                        value={formData.usefulLifeMonths}
+                        onChange={(e) => handleInputChange("usefulLifeMonths", e.target.value)}
+                        className="h-10 border-zinc-200"
+                    />
+                </div>
+                <div className="space-y-1.5">
+                    <Label className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Rate (%) <span className="text-red-500">*</span></Label>
                     <Input 
                         type="number"
                         value={formData.depreciationRate}
@@ -232,7 +274,7 @@ export const AssetRegisterDialog = ({ isOpen, onClose, onSubmit }: AssetRegister
                     />
                 </div>
                 <div className="space-y-1.5">
-                    <Label className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Reporting Date <span className="text-red-500">*</span></Label>
+                    <Label className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Reporting Date</Label>
                     <Input 
                         type="date"
                         value={formData.reportingDate}
@@ -243,7 +285,8 @@ export const AssetRegisterDialog = ({ isOpen, onClose, onSubmit }: AssetRegister
             </div>
           </div>
 
-          <DialogFooter className="pt-4 border-t border-zinc-100 gap-3">
+          </div>
+          <DialogFooter className="p-6 pt-4 border-t border-zinc-100 gap-3 bg-zinc-50/30">
             <Button 
                 type="button" 
                 variant="secondary" 

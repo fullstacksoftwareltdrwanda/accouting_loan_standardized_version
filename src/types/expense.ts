@@ -15,6 +15,7 @@ export interface Expense {
   category: ExpenseCategory;
   amount: number;
   accountCode: string; // Linked to GL Ledger (e.g. 5101)
+  paymentAccountCode?: string; // Source account for payment (e.g. Cash or Bank)
   status: StatusType; // 'paid' or 'pending'
   reference?: string;
 }

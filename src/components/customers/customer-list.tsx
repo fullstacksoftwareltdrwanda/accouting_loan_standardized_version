@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Users } from "lucide-react";
 import { Customer } from "@/types/customer";
-import { getCustomers } from "@/services/mock/customer.service";
+import { getCustomers } from "@/services/customer.service";
 import { DataTable } from "@/components/table/data-table";
 import { customerColumns } from "./customer-columns";
 import { Button } from "@/components/ui/button";
@@ -13,15 +13,20 @@ export function CustomerList() {
   const router = useRouter();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const load = async () => {
       try {
+        setIsLoading(true);
+        setError(null);
         const data = await getCustomers();
-        setCustomers(data);
-      } catch (error) {
-        console.error("Failed to load customers", error);
+        // The service returns { customers, meta }
+        setCustomers(data.customers as Customer[]);
+      } catch (err: any) {
+        console.error("Failed to load customers", err);
+        setError(err.message || "An unexpected error occurred while fetching members.");
       } finally {
         setIsLoading(false);
       }
@@ -30,9 +35,9 @@ export function CustomerList() {
   }, []);
 
   const filteredCustomers = customers.filter(c => 
-    c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    c.memberNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    c.phone.includes(searchQuery)
+    (c.name?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false) ||
+    (c.memberNumber?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false) ||
+    (c.phone?.includes(searchQuery) ?? false)
   );
 
   const actions = [

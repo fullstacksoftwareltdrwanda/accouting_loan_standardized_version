@@ -12,11 +12,12 @@ import { DataTable } from "@/components/table/data-table";
 import { Asset } from "@/types/asset";
 import { AssetStatsSection } from "./asset-stats";
 import { assetColumns, getAssetActions } from "./asset-columns";
-import { getAssets, createAsset } from "@/services/mock/asset.service";
+import { getAssets, createAsset } from "@/services/asset.service";
 import { AssetRegisterDialog } from "./asset-register-dialog";
 
 export const AssetList = () => {
   const [assets, setAssets] = useState<Asset[]>([]);
+  const [stats, setStats] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,7 +26,8 @@ export const AssetList = () => {
     setIsLoading(true);
     try {
       const data = await getAssets();
-      setAssets(data);
+      setAssets(data.assets);
+      setStats(data.stats);
     } catch (error) {
       console.error("Failed to load assets", error);
     } finally {

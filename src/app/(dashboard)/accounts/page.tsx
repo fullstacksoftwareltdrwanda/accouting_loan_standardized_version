@@ -6,7 +6,7 @@ import { AccountList } from "@/components/accounts/account-list";
 import { AccountFormCard } from "@/components/accounts/account-form-card";
 import { AccountStats } from "@/components/accounts/account-stats";
 import { GLAccount } from "@/types/account";
-import { getAccounts, createAccount } from "@/services/mock/account.service";
+import { getAccounts, createAccount } from "@/services/account.service";
 
 export default function AccountsPage() {
   const [accounts, setAccounts] = useState<GLAccount[]>([]);
@@ -77,7 +77,11 @@ export default function AccountsPage() {
 
         {/* Step 3: Accounts List */}
         <section className="animate-in fade-in slide-in-from-bottom-4 duration-1000">
-            <AccountList accounts={accounts} isLoading={isLoading} />
+            <AccountList 
+              accounts={accounts} 
+              isLoading={isLoading} 
+              onAccountDeactivated={(id) => setAccounts(prev => prev.filter(a => a.id !== id))}
+            />
         </section>
       </div>
     </div>

@@ -14,8 +14,8 @@ import {
   DollarSign,
   ArrowLeft
 } from "lucide-react";
-import { getLoanById } from "@/services/mock/loan.service";
-import { MOCK_CUSTOMERS } from "@/data/mock/customers";
+import { getLoanById } from "@/services/loan.service";
+import { getCustomerById } from "@/services/customer.service";
 import { Loan } from "@/types/loan";
 import { Customer } from "@/types/customer";
 import { Button } from "@/components/ui/button";
@@ -32,13 +32,19 @@ export default function LoanDetailsPage() {
   useEffect(() => {
     const load = async () => {
       if (typeof id !== "string") return;
-      const ln = await getLoanById(id);
-      if (ln) {
-        setLoan(ln);
-        const cust = MOCK_CUSTOMERS.find(c => c.id === ln.customerId);
-        if (cust) setCustomer(cust);
+      try {
+        setIsLoading(true);
+        const ln = await getLoanById(id) as Loan;
+        if (ln) {
+          setLoan(ln);
+          const cust = await getCustomerById(ln.customerId) as Customer;
+          if (cust) setCustomer(cust);
+        }
+      } catch (error) {
+        console.error("Failed to load loan data", error);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
     load();
   }, [id]);

@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 import { Menu, X, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { topNavItems, sidebarNavigationConfig } from "@/config/navigation";
+import { logoutAction } from "@/lib/auth-actions";
+import { clearTokens } from "@/lib/api-client";
 
 export const MobileNav = () => {
   const pathname = usePathname();
@@ -130,7 +132,11 @@ export const MobileNav = () => {
             {/* Drawer Footer */}
             <div className="p-3 border-t border-[var(--border-subtle)]">
               <button
-                onClick={() => { window.location.href = "/login"; }}
+                onClick={async () => {
+                  await logoutAction();
+                  clearTokens();
+                  window.location.href = "/login";
+                }}
                 className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-[var(--text-secondary)] hover:bg-rose-50 hover:text-rose-500 transition-all"
               >
                 <LogOut className="w-[18px] h-[18px]" />

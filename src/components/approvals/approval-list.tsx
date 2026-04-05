@@ -9,7 +9,7 @@ import {
   ShieldAlert
 } from "lucide-react";
 import { ApprovalRequest } from "@/types/approval";
-import { getPendingRequests, processRequest } from "@/services/mock/approval.service";
+import { getPendingRequests, approveRequest, rejectRequest } from "@/services/approval.service";
 import { DataTable } from "@/components/table/data-table";
 import { approvalColumns, getApprovalActions } from "./approval-columns";
 import { ApprovalStats } from "./approval-stats";
@@ -39,20 +39,24 @@ export function ApprovalList() {
 
   const handleDecision = async (id: string, action: "approve" | "reject") => {
     try {
-      const success = await processRequest(id, action);
-      if (success) {
-        setRequests((prev) => 
-          prev.map((req) => 
-            req.id === id ? { 
-              ...req, 
-              status: action === "approve" ? "active" : "inactive",
-              reviewedBy: "Director" 
-            } : req
-          )
-        );
+      if (action === "approve") {
+        await approveRequest(id);
+      } else {
+        await rejectRequest(id, "Rejected by user");
       }
-    } catch (error) {
+      
+      setRequests((prev) => 
+        prev.map((req) => 
+          req.id === id ? { 
+            ...req, 
+            status: action === "approve" ? "active" : "inactive",
+            reviewedBy: "Current User" 
+          } : req
+        )
+      );
+    } catch (error: any) {
       console.error("Decision failed", error);
+      alert(error.message || "Action failed");
     }
   };
 

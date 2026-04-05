@@ -1,11 +1,39 @@
 "use client";
 
-import React from "react";
-import { Table as TableIcon } from "lucide-react";
-import { MOCK_LEDGER_TRANSACTIONS } from "@/data/mock/ledger";
+import React, { useState, useEffect } from "react";
+import { Table as TableIcon, Loader2 } from "lucide-react";
+import { getLedgerEntries } from "@/services/ledger.service";
 
 export function GeneralLedgerTable() {
+  const [entries, setEntries] = useState<any[]>([]);
+  const [totals, setTotals] = useState({ debit: 0, credit: 0 });
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const { entries, totals } = await getLedgerEntries();
+        setEntries(entries);
+        setTotals(totals);
+      } catch (err) {
+        console.error("Failed to load ledger", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    load();
+  }, []);
+
   const fmt = (amount: number) => amount.toLocaleString("en-US", { minimumFractionDigits: 2 });
+
+  if (isLoading) {
+    return (
+      <div className="p-20 text-center space-y-4 bg-white rounded-xl border border-zinc-100 italic font-medium text-zinc-400 animate-pulse">
+        <Loader2 className="h-8 w-8 animate-spin mx-auto text-blue-600 mb-4" />
+        <p className="text-[11px] uppercase tracking-widest font-black">Syncing Unified Ledger...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white rounded-xl border border-zinc-100 shadow-sm overflow-hidden">
@@ -34,7 +62,7 @@ export function GeneralLedgerTable() {
             </tr>
           </thead>
           <tbody className="divide-y divide-zinc-50 bg-white">
-            {MOCK_LEDGER_TRANSACTIONS.map((tx) => (
+            {entries.map((tx) => (
               <tr key={tx.id} className="hover:bg-zinc-50/50 transition-colors text-zinc-500 font-medium">
                 <td className="px-3 py-2">{tx.date}</td>
                 <td className="px-3 py-2">
@@ -69,9 +97,11 @@ export function GeneralLedgerTable() {
           <tfoot className="bg-zinc-50/60 font-semibold border-t border-zinc-100 text-right">
             <tr>
               <td colSpan={6} className="px-3 py-3 text-zinc-700 text-[12px] text-right">Totals:</td>
-              <td className="px-3 py-3 text-emerald-600 text-[12px]">10,001,500.00</td>
-              <td className="px-3 py-3 text-rose-500 text-[12px]">10,001,500.00</td>
-              <td className="px-3 py-3 text-blue-600 text-[12px]">0.00</td>
+              <td className="px-3 py-3 text-emerald-600 text-[12px]">{fmt(totals.debit)}</td>
+              <td className="px-3 py-3 text-rose-500 text-[12px]">{fmt(totals.credit)}</td>
+              <td className={`px-3 py-3 text-[12px] ${totals.debit - totals.credit === 0 ? 'text-blue-600' : 'text-rose-500'}`}>
+                {fmt(totals.debit - totals.credit)}
+              </td>
               <td className="px-3 py-3"></td>
             </tr>
           </tfoot>

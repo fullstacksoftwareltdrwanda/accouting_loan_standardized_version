@@ -7,8 +7,8 @@ import { ExpenseRecordForm } from "@/components/expenses/expense-record-form";
 import { ExpenseAccountingInfo } from "@/components/expenses/expense-accounting-info";
 import { Expense } from "@/types/expense";
 import { GLAccount } from "@/types/account";
-import { getExpenses, createExpense } from "@/services/mock/expense.service";
-import { getAccounts } from "@/services/mock/account.service";
+import { getExpenses, createExpense } from "@/services/expense.service";
+import { getAccounts } from "@/services/account.service";
 import { DataTable } from "@/components/table/data-table";
 import { expenseColumns, getExpenseActions } from "@/components/expenses/expense-columns";
 

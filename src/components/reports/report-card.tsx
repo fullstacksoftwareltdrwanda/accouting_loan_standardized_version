@@ -11,7 +11,7 @@ import {
   Clock 
 } from "lucide-react";
 import { Report } from "@/types/report";
-import { generateReport, downloadReport } from "@/services/mock/report.service";
+import { generateReport, downloadReport } from "@/services/report.service";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";

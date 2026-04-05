@@ -9,6 +9,7 @@ datasource db {
   provider = "postgresql"
 }
 
+
 // --- Enums ---
 
 enum Role {
@@ -58,6 +59,12 @@ enum PaymentMethod {
   Mobile_Money
 }
 
+enum DisbursementMethod {
+  BankTransfer
+  Cash
+  Cheque
+}
+
 enum PaymentStatus {
   Paid
   Pending
@@ -69,6 +76,7 @@ enum InstalmentStatus {
   Partially_Paid
   Fully_Paid
   Overdue
+  Waived
 }
 
 enum VarianceType {
@@ -100,20 +108,34 @@ enum ApprovalStatus {
   pending
   approved
   rejected
+  cancelled
+}
+
+enum NotificationType {
+  APPROVAL_PENDING
+  LOAN_OVERDUE
+  PAYMENT_DUE
+  PAYMENT_RECEIVED
+  SYSTEM
 }
 
 // --- Models ---
 
 model User {
-  userId       Int           @id @default(autoincrement()) @map("user_id")
-  username     String        @unique
-  password     String
-  role         Role
-  fullName     String        @map("full_name")
-  email        String        @unique
-  isActive     Boolean       @default(true) @map("is_active")
-  createdAt    DateTime      @default(now()) @map("created_at")
-  activityLogs ActivityLog[]
+  userId         Int           @id @default(autoincrement()) @map("user_id")
+  username       String        @unique
+  password       String
+  role           Role
+  fullName       String        @map("full_name")
+  email          String        @unique
+  phone          String?
+  isActive       Boolean       @default(true) @map("is_active")
+  status         String        @default("active") // active | inactive | suspended
+  lastLogin      DateTime?     @map("last_login")
+  refreshToken   String?       @map("refresh_token")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  activityLogs   ActivityLog[]
+  notifications  Notification[]
 
   @@map("users")
 }
@@ -151,13 +173,14 @@ model Customer {
   createdAt           DateTime     @default(now()) @map("created_at")
   updatedAt           DateTime     @updatedAt @map("updated_at")
   isActive            Boolean      @default(true) @map("is_active")
-  status              String       @default("Approved")
-  docId               String?      @map("doc_id") // National ID Path
-  docContract         String?      @map("doc_contract") // Work Contract Path
-  docStatement        String?      @map("doc_statement") // Bank Statement Path
-  docPayslip          String?      @map("doc_payslip") // Payslip Path
-  docMarital          String?      @map("doc_marital") // Marital Status Cert Path
-  docRdb              String?      @map("doc_rdb") // RDB Certificate Path
+  status              String       @default("Approved") // Active | Blacklisted | Deceased
+  blacklistReason     String?      @map("blacklist_reason")
+  docId               String?      @map("doc_id")
+  docContract         String?      @map("doc_contract")
+  docStatement        String?      @map("doc_statement")
+  docPayslip          String?      @map("doc_payslip")
+  docMarital          String?      @map("doc_marital")
+  docRdb              String?      @map("doc_rdb")
   hasGuarantor        String       @default("No") @map("has_guarantor")
   guarantorName       String?      @map("guarantor_name")
   guarantorId         String?      @map("guarantor_id")
@@ -187,52 +210,62 @@ model Customer {
 }
 
 model LoanPortfolio {
-  loanId                  Int        @id @default(autoincrement()) @map("loan_id")
-  customerId              Int        @map("customer_id")
-  loanNumber              String     @unique @map("loan_number")
-  loanAmount              Decimal    @default(0.00) @map("loan_amount") @db.Decimal(15, 2)
-  managementFeeRate       Decimal    @default(5.50) @map("management_fee_rate") @db.Decimal(5, 2)
-  managementFeeAmount     Decimal    @default(0.00) @map("management_fee_amount") @db.Decimal(15, 2)
-  totalDisbursed          Decimal    @default(0.00) @map("total_disbursed") @db.Decimal(15, 2)
-  interestRate            Decimal    @map("interest_rate") @db.Decimal(5, 2)
-  numberOfInstalments     Int        @map("number_of_instalments")
-  disbursementDate        DateTime   @map("disbursement_date")
-  maturityDate            DateTime   @map("maturity_date")
-  totalInterest           Decimal    @default(0.00) @map("total_interest") @db.Decimal(15, 2)
-  totalManagementFees     Decimal    @default(0.00) @map("total_management_fees") @db.Decimal(15, 2)
-  totalPayment            Decimal    @default(0.00) @map("total_payment") @db.Decimal(15, 2)
-  monthlyPayment          Decimal    @default(0.00) @map("monthly_payment") @db.Decimal(15, 2)
-  principalOutstanding    Decimal    @default(0.00) @map("principal_outstanding") @db.Decimal(15, 2)
-  interestOutstanding     Decimal    @default(0.00) @map("interest_outstanding") @db.Decimal(15, 2)
-  totalOutstanding        Decimal    @default(0.00) @map("total_outstanding") @db.Decimal(15, 2)
-  totalPaid               Decimal    @default(0.00) @map("total_paid") @db.Decimal(15, 2)
-  totalPrincipalPaid      Decimal    @default(0.00) @map("total_principal_paid") @db.Decimal(15, 2)
-  totalInterestPaid       Decimal    @default(0.00) @map("total_interest_paid") @db.Decimal(15, 2)
-  totalManagementFeesPaid Decimal    @default(0.00) @map("total_management_fees_paid") @db.Decimal(15, 2)
-  accruedInterest         Decimal    @default(0.00) @map("accrued_interest") @db.Decimal(15, 2)
-  accruedDays             Int        @default(0) @map("accrued_days")
-  accruedManagementFees   Decimal    @default(0.00) @map("accrued_management_fees") @db.Decimal(15, 2)
-  deferredManagementFees  Decimal    @default(0.00) @map("deferred_management_fees") @db.Decimal(15, 2)
-  daysOverdue             Int        @default(0) @map("days_overdue")
-  penalties               Decimal    @default(0.00) @db.Decimal(15, 2)
-  cashAmount              Decimal    @default(0.00) @map("cash_amount") @db.Decimal(15, 2)
-  bankAmount              Decimal    @default(0.00) @map("bank_amount") @db.Decimal(15, 2)
-  collateralType          String?    @map("collateral_type")
-  collateralDescription   String?    @map("collateral_description")
-  collateralValue         Decimal?   @default(0.00) @map("collateral_value") @db.Decimal(15, 2)
-  collateralNetValue      Decimal?   @default(0.00) @map("collateral_net_value") @db.Decimal(15, 2)
-  provisionalRate         Decimal    @default(1.00) @map("provisional_rate") @db.Decimal(5, 2)
-  generalProvision        Decimal    @default(0.00) @map("general_provision") @db.Decimal(15, 2)
-  netBookValue            Decimal    @default(0.00) @map("net_book_value") @db.Decimal(15, 2)
-  loanStatus              LoanStatus @default(Active) @map("loan_status")
-  createdBy               Int        @map("created_by")
-  createdAt               DateTime   @default(now()) @map("created_at")
-  updatedAt               DateTime   @updatedAt @map("updated_at")
-  lastProvisionDate       DateTime?  @map("last_provision_date")
-  recordDate              DateTime?  @map("record_date")
-  deductFeeFromDisbursed  Decimal?   @map("deduct_fee_from_disbursed") @db.Decimal(15, 2)
-  isTopup                 Boolean    @default(false) @map("is_topup")
-  topupType               String?    @map("topup_type") // e.g., 'increasing', 'decreasing'
+  loanId                  Int                @id @default(autoincrement()) @map("loan_id")
+  customerId              Int                @map("customer_id")
+  loanNumber              String             @unique @map("loan_number")
+  loanAmount              Decimal            @default(0.00) @map("loan_amount") @db.Decimal(15, 2)
+  managementFeeRate       Decimal            @default(5.50) @map("management_fee_rate") @db.Decimal(5, 2)
+  managementFeeAmount     Decimal            @default(0.00) @map("management_fee_amount") @db.Decimal(15, 2)
+  deductFeeUpfront        Boolean            @default(true) @map("deduct_fee_upfront")
+  totalDisbursed          Decimal            @default(0.00) @map("total_disbursed") @db.Decimal(15, 2)
+  interestRate            Decimal            @map("interest_rate") @db.Decimal(5, 2)
+  numberOfInstalments     Int                @map("number_of_instalments")
+  monthlyPayment          Decimal            @default(0.00) @map("monthly_payment") @db.Decimal(15, 2)
+  totalInterest           Decimal            @default(0.00) @map("total_interest") @db.Decimal(15, 2)
+  totalManagementFees     Decimal            @default(0.00) @map("total_management_fees") @db.Decimal(15, 2)
+  totalPayment            Decimal            @default(0.00) @map("total_payment") @db.Decimal(15, 2)
+  disbursementDate        DateTime           @map("disbursement_date")
+  firstPaymentDate        DateTime           @map("first_payment_date")
+  maturityDate            DateTime           @map("maturity_date")
+  purpose                 String?
+  disbursementMethod      DisbursementMethod @default(BankTransfer) @map("disbursement_method")
+  bankName                String?            @map("bank_name")
+  accountNumber           String?            @map("account_number")
+  principalOutstanding    Decimal            @default(0.00) @map("principal_outstanding") @db.Decimal(15, 2)
+  interestOutstanding     Decimal            @default(0.00) @map("interest_outstanding") @db.Decimal(15, 2)
+  totalOutstanding        Decimal            @default(0.00) @map("total_outstanding") @db.Decimal(15, 2)
+  totalPaid               Decimal            @default(0.00) @map("total_paid") @db.Decimal(15, 2)
+  totalPrincipalPaid      Decimal            @default(0.00) @map("total_principal_paid") @db.Decimal(15, 2)
+  totalInterestPaid       Decimal            @default(0.00) @map("total_interest_paid") @db.Decimal(15, 2)
+  totalManagementFeesPaid Decimal            @default(0.00) @map("total_management_fees_paid") @db.Decimal(15, 2)
+  accruedInterest         Decimal            @default(0.00) @map("accrued_interest") @db.Decimal(15, 2)
+  accruedDays             Int                @default(0) @map("accrued_days")
+  accruedManagementFees   Decimal            @default(0.00) @map("accrued_management_fees") @db.Decimal(15, 2)
+  deferredManagementFees  Decimal            @default(0.00) @map("deferred_management_fees") @db.Decimal(15, 2)
+  daysOverdue             Int                @default(0) @map("days_overdue")
+  penalties               Decimal            @default(0.00) @db.Decimal(15, 2)
+  cashAmount              Decimal            @default(0.00) @map("cash_amount") @db.Decimal(15, 2)
+  bankAmount              Decimal            @default(0.00) @map("bank_amount") @db.Decimal(15, 2)
+  collateralType          String?            @map("collateral_type")
+  collateralDescription   String?            @map("collateral_description")
+  collateralValue         Decimal?           @default(0.00) @map("collateral_value") @db.Decimal(15, 2)
+  collateralNetValue      Decimal?           @default(0.00) @map("collateral_net_value") @db.Decimal(15, 2)
+  provisionalRate         Decimal            @default(1.00) @map("provisional_rate") @db.Decimal(5, 2)
+  generalProvision        Decimal            @default(0.00) @map("general_provision") @db.Decimal(15, 2)
+  netBookValue            Decimal            @default(0.00) @map("net_book_value") @db.Decimal(15, 2)
+  loanStatus              LoanStatus         @default(Pending_Approval) @map("loan_status")
+  createdBy               Int                @map("created_by")
+  approvedBy              Int?               @map("approved_by")
+  approvedAt              DateTime?          @map("approved_at")
+  writeOffReason          String?            @map("write_off_reason")
+  writeOffDate            DateTime?          @map("write_off_date")
+  createdAt               DateTime           @default(now()) @map("created_at")
+  updatedAt               DateTime           @updatedAt @map("updated_at")
+  lastProvisionDate       DateTime?          @map("last_provision_date")
+  recordDate              DateTime?          @map("record_date")
+  isTopup                 Boolean            @default(false) @map("is_topup")
+  topupType               String?            @map("topup_type")
+  topupSourceLoanId       Int?               @map("topup_source_loan_id")
 
   customer         Customer                @relation(fields: [customerId], references: [customerId])
   instalments      LoanInstalment[]
@@ -291,6 +324,7 @@ model LoanPayment {
   paymentId        Int            @id @default(autoincrement()) @map("payment_id")
   loanInstalmentId Int            @map("loan_instalment_id")
   loanId           Int            @map("loan_id")
+  customerId       Int?           @map("customer_id")
   monthPaid        String?        @map("month_paid")
   paymentDate      DateTime       @default(now()) @map("payment_date")
   beginningBalance Decimal        @default(0.00) @map("beginning_balance") @db.Decimal(15, 2)
@@ -304,10 +338,15 @@ model LoanPayment {
   paymentMethod    PaymentMethod? @map("payment_method")
   referenceNumber  String?        @map("reference_number")
   notes            String?
+  isPrepayment     Boolean        @default(false) @map("is_prepayment")
+  prepaymentScope  String?        @map("prepayment_scope") // Full | Partial | Current
+  paymentEvidence  String?        @map("payment_evidence")
+  reversedAt       DateTime?      @map("reversed_at")
+  reversalReason   String?        @map("reversal_reason")
+  recordedBy       Int?           @map("recorded_by")
   createdAt        DateTime       @default(now()) @map("created_at")
   updatedAt        DateTime       @updatedAt @map("updated_at")
   adjustmentId     Int?           @map("adjustment_id")
-  paymentEvidence  String?        @map("payment_evidence")
 
   instalment LoanInstalment        @relation(fields: [loanInstalmentId], references: [instalmentId])
   loan       LoanPortfolio         @relation(fields: [loanId], references: [loanId])
@@ -398,12 +437,13 @@ model LoanTransaction {
 
 model ChartOfAccount {
   accountId     Int      @id @default(autoincrement()) @map("account_id")
-  class         String // e.g., 'Balance Sheet', 'Income Statement'
+  class         String
   accountCode   String   @unique @map("account_code")
   accountName   String   @map("account_name")
-  accountType   String?  @map("account_type") // e.g., 'Asset', 'Liability', 'Equity', 'Revenue', 'Expense'
+  accountType   String?  @map("account_type")
   subType       String?  @map("sub_type")
-  normalBalance String?  @map("normal_balance") // 'Debit' or 'Credit'
+  normalBalance String?  @map("normal_balance")
+  description   String?
   isActive      Boolean  @default(true) @map("is_active")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
@@ -429,15 +469,30 @@ model Ledger {
   endingBalance    Decimal  @default(0.00) @map("ending_balance") @db.Decimal(15, 2)
   referenceType    String?  @map("reference_type")
   referenceId      String?  @map("reference_id")
+  journalEntryId   Int?     @map("journal_entry_id")
   createdBy        Int?     @map("created_by")
   createdAt        DateTime @default(now()) @map("created_at")
   updatedAt        DateTime @updatedAt @map("updated_at")
   sequenceNumber   Int      @default(0) @map("sequence_number")
 
-  account ChartOfAccount @relation(fields: [accountCode], references: [accountCode])
+  account      ChartOfAccount @relation(fields: [accountCode], references: [accountCode])
+  journalEntry JournalEntry?  @relation(fields: [journalEntryId], references: [id])
 
   @@index([accountCode, transactionDate, sequenceNumber])
   @@map("ledger")
+}
+
+model JournalEntry {
+  id          Int      @id @default(autoincrement())
+  date        DateTime
+  description String
+  reference   String?
+  createdBy   Int?     @map("created_by")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  lines Ledger[]
+
+  @@map("journal_entries")
 }
 
 model Expense {
@@ -446,11 +501,16 @@ model Expense {
   expenseDate      DateTime      @map("expense_date")
   accountCode      String        @map("account_code")
   accountName      String        @map("account_name")
+  paymentAccountCode String?     @map("payment_account_code")
   expenseAmount    Decimal       @map("expense_amount") @db.Decimal(15, 2)
   paymentType      PaymentMethod @default(Bank) @map("payment_type")
+  category         String?
+  vendor           String?
   description      String?
+  attachment       String?
   createdBy        Int?          @map("created_by")
   createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
 
   @@map("expenses")
 }
@@ -478,6 +538,12 @@ model Asset {
   disposalDate            DateTime? @map("disposal_date")
   disposalValue           Decimal?  @map("disposal_value") @db.Decimal(15, 2)
   disposalReason          String?   @map("disposal_reason")
+  glAccountCode           String?   @map("gl_account_code")
+  status                  String    @default("Active") // Active | Disposed | FullyDepreciated
+  assetType               String    @default("Fixed") @map("asset_type") // Fixed | Current | Intangible
+  depreciationMethod      String    @default("StraightLine") @map("depreciation_method")
+  usefulLifeMonths        Int?      @map("useful_life_months")
+  currentValue            Decimal   @default(0.00) @map("current_value") @db.Decimal(15, 2)
   createdAt               DateTime  @default(now()) @map("created_at")
   updatedAt               DateTime  @updatedAt @map("updated_at")
 
@@ -525,7 +591,8 @@ model PendingApproval {
   actionType      String         @map("action_type")
   entityType      String         @map("entity_type")
   entityId        Int?           @map("entity_id")
-  actionData      String         @map("action_data") // JSON data string
+  actionData      String         @map("action_data")
+  previousState   String?        @map("previous_state")
   description     String
   submittedBy     String         @map("submitted_by")
   submittedByRole String         @map("submitted_by_role")
@@ -538,6 +605,22 @@ model PendingApproval {
   @@map("pending_approvals")
 }
 
+model Notification {
+  id         Int              @id @default(autoincrement())
+  userId     Int              @map("user_id")
+  type       NotificationType
+  title      String
+  message    String
+  entityType String?          @map("entity_type")
+  entityId   String?          @map("entity_id")
+  read       Boolean          @default(false)
+  createdAt  DateTime         @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [userId])
+
+  @@map("notifications")
+}
+
 model ActivityLog {
   id          Int        @id @default(autoincrement())
   userId      Int        @map("user_id")
@@ -546,6 +629,7 @@ model ActivityLog {
   entityType  String?    @map("entity_type")
   entityId    Int?       @map("entity_id")
   description String?
+  payload     String?    // JSON snapshot
   ipAddress   String?    @map("ip_address")
   userAgent   String?    @map("user_agent")
   createdAt   DateTime   @default(now()) @map("created_at")

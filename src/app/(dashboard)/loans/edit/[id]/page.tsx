@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { ChevronRight, Home, LayoutDashboard, Loader2 } from "lucide-react";
 import { LoanForm } from "@/components/loans/add-loan-form";
-import { getLoanById } from "@/services/mock/loan.service";
+import { getLoanById } from "@/services/loan.service";
 import { Loan } from "@/types/loan";
 
 export default function EditLoanPage() {

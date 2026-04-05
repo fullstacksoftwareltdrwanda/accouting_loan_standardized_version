@@ -10,7 +10,8 @@ import { FileText, Edit, Trash, ArrowRightLeft } from "lucide-react";
 
 export const getAccountActions = (
   onEdit: (account: GLAccount) => void,
-  onViewLedger: (account: GLAccount) => void
+  onViewLedger: (account: GLAccount) => void,
+  onDeactivate: (account: GLAccount) => void
 ): DataTableAction<GLAccount>[] => [
   {
     label: "View Ledger",
@@ -31,8 +32,7 @@ export const getAccountActions = (
     label: "Deactivate",
     icon: Trash,
     variant: "danger",
-    onClick: (account) => console.log("Deactivate", account),
-    disabled: (account) => account.balance !== 0, // Cannot deactivate if balance exists
+    onClick: onDeactivate,
   },
 ];
 
@@ -81,13 +81,13 @@ export const accountColumns = (
     cell: ({ row }) => <span className="font-semibold text-zinc-700">{row.getValue("normalBalance")}</span>,
   },
   {
-    accessorKey: "status",
+    accessorKey: "isActive",
     header: "Status",
     cell: ({ row }) => {
-        const status = row.getValue("status") as string;
+        const isActive = row.getValue("isActive") as boolean;
         return (
-            <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${status === 'active' ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'}`}>
-                {status === 'active' ? 'Active' : 'Inactive'}
+            <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${isActive ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'}`}>
+                {isActive ? 'Active' : 'Inactive'}
             </span>
         );
     }

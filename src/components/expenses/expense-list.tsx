@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Plus } from "lucide-react";
 import { Expense } from "@/types/expense";
-import { getExpenses, createExpense } from "@/services/mock/expense.service";
+import { getExpenses, createExpense } from "@/services/expense.service";
 import { DataTable } from "@/components/table/data-table";
 import { expenseColumns, getExpenseActions } from "./expense-columns";
 import { DynamicForm } from "@/components/forms/dynamic-form";
